@@ -6,7 +6,7 @@
 [![Socket.IO](https://img.shields.io/badge/Socket.IO-4.7.2-010101?logo=socket.io)](https://socket.io/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-7.2.1-47A248?logo=mongodb)](https://www.mongodb.com/)
 
-> A **modern real-time chat app** built with **React + Socket.IO**, featuring authentication, group chats, media sharing, and a sleek UI.
+> A **modern real-time chat application** built with **React + Socket.IO**, featuring authentication, group chats, media sharing, and a beautiful responsive UI.
 
 ---
 
