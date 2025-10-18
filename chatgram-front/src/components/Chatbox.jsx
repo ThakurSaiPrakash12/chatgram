@@ -324,7 +324,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
             <img
               src={viewingImage.url}
               alt={viewingImage.name}
-              className="max-w-[90vw] sm:max-w-[80vw] md:max-w-[70vw] lg:max-w-[60vw] max-h-[70vh] sm:max-h-[75vh] md:max-h-[80vh] w-auto h-auto rounded-lg sm:rounded-2xl shadow-2xl object-contain"
+              className="max-w-[75vw] max-h-[70vh] sm:max-h-[75vh] md:max-h-[80vh] w-auto h-auto rounded-lg sm:rounded-2xl shadow-2xl object-contain"
               title="View image"
             />
           </div>
