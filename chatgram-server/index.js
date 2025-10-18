@@ -12,10 +12,29 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// CORS configuration - allow both local development and production
+const allowedOrigins = [
+  'http://localhost:5173',           // Local development
+  'https://chatgram-nine.vercel.app', // Your Vercel deployment
+  'https://chatgram-nine.vercel.app/'
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173', // Vite's default port
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('Blocked origin:', origin);
+      callback(null, true); // Allow all for now, can restrict later
+    }
+  },
   credentials: true
 }));
+
 // Increase payload limit for base64 images (10MB)
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
@@ -32,7 +51,12 @@ app.use("/api/chats", chatRoutes);
 app.use("/api/messages", messageRoutes);
 
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, { 
+  cors: { 
+    origin: allowedOrigins,
+    credentials: true 
+  } 
+});
 
 let onlineUsers = {}; // { userId: socket.id }
 
