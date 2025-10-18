@@ -299,18 +299,22 @@ function ChatBox({ chat, user, setCurrentChat }) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  const imgElement = document.querySelector('.image-viewer-fullscreen');
-                  if (imgElement) {
-                    if (imgElement.requestFullscreen) {
-                      imgElement.requestFullscreen();
-                    } else if (imgElement.webkitRequestFullscreen) {
-                      imgElement.webkitRequestFullscreen();
-                    } else if (imgElement.mozRequestFullScreen) {
-                      imgElement.mozRequestFullScreen();
-                    } else if (imgElement.msRequestFullscreen) {
-                      imgElement.msRequestFullscreen();
-                    } else {
-                      window.open(viewingImage.url, '_blank');
+                  const elem = document.documentElement;
+                  if (!document.fullscreenElement) {
+                    if (elem.requestFullscreen) {
+                      elem.requestFullscreen();
+                    } else if (elem.webkitRequestFullscreen) {
+                      elem.webkitRequestFullscreen();
+                    } else if (elem.msRequestFullscreen) {
+                      elem.msRequestFullscreen();
+                    }
+                  } else {
+                    if (document.exitFullscreen) {
+                      document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                      document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                      document.msExitFullscreen();
                     }
                   }
                 }}
@@ -350,40 +354,8 @@ function ChatBox({ chat, user, setCurrentChat }) {
             <img
               src={viewingImage.url}
               alt={viewingImage.name}
-              className="image-viewer-fullscreen max-w-full max-h-[85vh] sm:max-h-[80vh] rounded-lg sm:rounded-2xl shadow-2xl object-contain cursor-zoom-in"
-              onClick={(e) => {
-                e.stopPropagation();
-                // Toggle fullscreen with better browser support
-                const elem = e.target;
-                
-                if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement) {
-                  // Try different fullscreen APIs for browser compatibility
-                  if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                  } else if (elem.webkitRequestFullscreen) { // Safari
-                    elem.webkitRequestFullscreen();
-                  } else if (elem.mozRequestFullScreen) { // Firefox
-                    elem.mozRequestFullScreen();
-                  } else if (elem.msRequestFullscreen) { // IE/Edge
-                    elem.msRequestFullscreen();
-                  } else {
-                    // Fallback: Open in new tab
-                    window.open(viewingImage.url, '_blank');
-                  }
-                } else {
-                  // Exit fullscreen
-                  if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                  } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                  } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                  } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                  }
-                }
-              }}
-              title="Click to view fullscreen"
+              className="max-w-full max-h-[85vh] sm:max-h-[80vh] rounded-lg sm:rounded-2xl shadow-2xl object-contain"
+              title="View image"
             />
           </div>
 
@@ -391,8 +363,8 @@ function ChatBox({ chat, user, setCurrentChat }) {
           <div className="mt-2 sm:mt-4 text-white text-xs sm:text-sm opacity-70 text-center" onClick={(e) => e.stopPropagation()}>
             <p className="flex items-center justify-center gap-2">
               <span>💡</span>
-              <span className="hidden sm:inline">Click image for fullscreen • Click outside to close</span>
-              <span className="sm:hidden">Tap image for fullscreen</span>
+              <span className="hidden sm:inline">Click fullscreen button above • Click outside to close</span>
+              <span className="sm:hidden">Tap fullscreen button</span>
             </p>
           </div>
         </div>
