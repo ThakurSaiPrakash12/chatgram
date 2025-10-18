@@ -295,6 +295,32 @@ function ChatBox({ chat, user, setCurrentChat }) {
 
             {/* Action Buttons */}
             <div className="flex gap-2 sm:gap-3">
+              {/* Fullscreen Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const imgElement = document.querySelector('.image-viewer-fullscreen');
+                  if (imgElement) {
+                    if (imgElement.requestFullscreen) {
+                      imgElement.requestFullscreen();
+                    } else if (imgElement.webkitRequestFullscreen) {
+                      imgElement.webkitRequestFullscreen();
+                    } else if (imgElement.mozRequestFullScreen) {
+                      imgElement.mozRequestFullScreen();
+                    } else if (imgElement.msRequestFullscreen) {
+                      imgElement.msRequestFullscreen();
+                    } else {
+                      window.open(viewingImage.url, '_blank');
+                    }
+                  }
+                }}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-1 sm:gap-2"
+                title="Fullscreen"
+              >
+                <span className="text-sm sm:text-base">⛶</span>
+                <span className="hidden sm:inline">Fullscreen</span>
+              </button>
+
               {/* Download Button */}
               <a
                 href={viewingImage.url}
@@ -324,17 +350,37 @@ function ChatBox({ chat, user, setCurrentChat }) {
             <img
               src={viewingImage.url}
               alt={viewingImage.name}
-              className="max-w-full max-h-[85vh] sm:max-h-[80vh] rounded-lg sm:rounded-2xl shadow-2xl object-contain cursor-zoom-in"
+              className="image-viewer-fullscreen max-w-full max-h-[85vh] sm:max-h-[80vh] rounded-lg sm:rounded-2xl shadow-2xl object-contain cursor-zoom-in"
               onClick={(e) => {
                 e.stopPropagation();
-                // Toggle fullscreen
+                // Toggle fullscreen with better browser support
                 const elem = e.target;
-                if (!document.fullscreenElement) {
-                  elem.requestFullscreen().catch(err => {
-                    console.log('Fullscreen error:', err);
-                  });
+                
+                if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement) {
+                  // Try different fullscreen APIs for browser compatibility
+                  if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                  } else if (elem.webkitRequestFullscreen) { // Safari
+                    elem.webkitRequestFullscreen();
+                  } else if (elem.mozRequestFullScreen) { // Firefox
+                    elem.mozRequestFullScreen();
+                  } else if (elem.msRequestFullscreen) { // IE/Edge
+                    elem.msRequestFullscreen();
+                  } else {
+                    // Fallback: Open in new tab
+                    window.open(viewingImage.url, '_blank');
+                  }
                 } else {
-                  document.exitFullscreen();
+                  // Exit fullscreen
+                  if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                  } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                  } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                  } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                  }
                 }
               }}
               title="Click to view fullscreen"
