@@ -15,9 +15,11 @@ const app = express();
 
 // CORS configuration - allow both local development and production
 const allowedOrigins = [
-  'http://localhost:5173',           // Local development
-  'https://chatgram-nine.vercel.app', // Your Vercel deployment
-  'https://chatgram-nine.vercel.app/'
+  'http://localhost:5173',            // Local development
+  'https://chatgram-nine.vercel.app', // Old Vercel deployment
+  'https://chatgram-nine.vercel.app/',
+  'https://chatgram-lyart.vercel.app', // New Vercel deployment
+  'https://chatgram-lyart.vercel.app/'
 ];
 
 app.use(cors({
