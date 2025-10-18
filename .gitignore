@@ -1,0 +1,27 @@
+
+node_modules/
+**/node_modules/
+chatgram-front/node_modules/
+chatgram-server/node_modules/
+
+# ============ Environment Variables ============
+# IMPORTANT: Never commit sensitive information
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.staging
+**/.env
+**/.env.*
+
+# ============ Build & Distribution ============
+# Frontend build files
+chatgram-front/dist/
+chatgram-front/build/
+dist/
+build/
+# Server build files
+chatgram-server/dist/
+chatgram-server/build/  
+
