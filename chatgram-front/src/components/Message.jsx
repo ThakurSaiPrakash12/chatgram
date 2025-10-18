@@ -57,7 +57,7 @@ function Message({ message, isOwn, onImageClick, onDelete }) {
         
         {/* Display image message */}
         {message.messageType === "image" && message.imageUrl ? (
-          <div className="mb-1.5 sm:mb-2 relative group">
+          <div className="mb-1.5 sm:mb-2">
             <img
               src={message.imageUrl}
               alt="Shared"
@@ -68,10 +68,6 @@ function Message({ message, isOwn, onImageClick, onDelete }) {
               })}
               title="Click to view & download"
             />
-            {/* Hover overlay with icon */}
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all rounded-lg flex items-center justify-center">
-              <span className="opacity-0 group-hover:opacity-100 text-3xl sm:text-4xl transition-opacity">🔍</span>
-            </div>
           </div>
         ) : (
           <div className="text-[13px] sm:text-sm md:text-base leading-relaxed">{message.content}</div>

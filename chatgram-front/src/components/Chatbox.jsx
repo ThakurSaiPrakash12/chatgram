@@ -295,36 +295,6 @@ function ChatBox({ chat, user, setCurrentChat }) {
 
             {/* Action Buttons */}
             <div className="flex gap-2 sm:gap-3">
-              {/* Fullscreen Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const elem = document.documentElement;
-                  if (!document.fullscreenElement) {
-                    if (elem.requestFullscreen) {
-                      elem.requestFullscreen();
-                    } else if (elem.webkitRequestFullscreen) {
-                      elem.webkitRequestFullscreen();
-                    } else if (elem.msRequestFullscreen) {
-                      elem.msRequestFullscreen();
-                    }
-                  } else {
-                    if (document.exitFullscreen) {
-                      document.exitFullscreen();
-                    } else if (document.webkitExitFullscreen) {
-                      document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                      document.msExitFullscreen();
-                    }
-                  }
-                }}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-1 sm:gap-2"
-                title="Fullscreen"
-              >
-                <span className="text-sm sm:text-base">⛶</span>
-                <span className="hidden sm:inline">Fullscreen</span>
-              </button>
-
               {/* Download Button */}
               <a
                 href={viewingImage.url}
@@ -363,8 +333,8 @@ function ChatBox({ chat, user, setCurrentChat }) {
           <div className="mt-2 sm:mt-4 text-white text-xs sm:text-sm opacity-70 text-center" onClick={(e) => e.stopPropagation()}>
             <p className="flex items-center justify-center gap-2">
               <span>💡</span>
-              <span className="hidden sm:inline">Click fullscreen button above • Click outside to close</span>
-              <span className="sm:hidden">Tap fullscreen button</span>
+              <span className="hidden sm:inline">Click outside to close</span>
+              <span className="sm:hidden">Tap outside to close</span>
             </p>
           </div>
         </div>
