@@ -320,11 +320,11 @@ function ChatBox({ chat, user, setCurrentChat }) {
           </div>
 
           {/* Image Container */}
-          <div className="relative w-full max-w-6xl h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+          <div className="relative w-full max-w-7xl h-full flex items-center justify-center p-2 sm:p-4" onClick={(e) => e.stopPropagation()}>
             <img
               src={viewingImage.url}
               alt={viewingImage.name}
-              className="max-w-full max-h-[85vh] sm:max-h-[80vh] rounded-lg sm:rounded-2xl shadow-2xl object-contain"
+              className="max-w-full max-h-[70vh] sm:max-h-[75vh] md:max-h-[80vh] w-auto h-auto rounded-lg sm:rounded-2xl shadow-2xl object-contain"
               title="View image"
             />
           </div>

@@ -61,7 +61,7 @@ function Message({ message, isOwn, onImageClick, onDelete }) {
             <img
               src={message.imageUrl}
               alt="Shared"
-              className="max-w-full max-h-40 sm:max-h-48 md:max-h-64 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+              className="w-full max-w-[200px] sm:max-w-[250px] md:max-w-[300px] lg:max-w-[350px] h-auto object-cover rounded-lg cursor-pointer hover:opacity-90 hover:shadow-xl transition-all"
               onClick={() => onImageClick && onImageClick({
                 url: message.imageUrl,
                 name: message.sender?.name || (isOwn ? "You" : "User")
