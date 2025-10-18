@@ -134,7 +134,7 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
       )}
 
       {/* Input Form */}
-      <form onSubmit={handleSend} className="flex items-center p-2 md:p-4 gap-1 md:gap-0">
+      <form onSubmit={handleSend} className="flex items-center p-1.5 sm:p-2 md:p-4 gap-0.5 sm:gap-1 md:gap-2">
         {/* Hidden File Input */}
         <input
           ref={fileInputRef}
@@ -148,7 +148,7 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="mr-1 md:mr-3 text-xl md:text-2xl hover:scale-110 transition-transform p-2 md:p-0"
+          className="mr-0.5 sm:mr-1 md:mr-3 text-lg sm:text-xl md:text-2xl hover:scale-110 transition-transform p-1 sm:p-2 md:p-0"
           title="Attach image"
         >
           📎
@@ -160,14 +160,14 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
           placeholder="Type a message..."
           value={text}
           onChange={handleTyping}
-          className="flex-1 px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-full border-2 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+          className="flex-1 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-3 text-[13px] sm:text-sm md:text-base rounded-full border-2 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
         />
 
         {/* Emoji Button */}
         <button
           type="button"
           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-          className="mx-1 md:mx-3 text-xl md:text-2xl hover:scale-110 transition-transform p-2 md:p-0"
+          className="mx-0.5 sm:mx-1 md:mx-3 text-lg sm:text-xl md:text-2xl hover:scale-110 transition-transform p-1 sm:p-2 md:p-0"
           title="Emoji"
         >
           😊
@@ -176,10 +176,10 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
         {/* Send Button */}
         <button
           type="submit"
-          className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white px-4 py-2 md:px-6 md:py-3 text-sm md:text-base rounded-full hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-1 md:gap-2"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-3 text-[13px] sm:text-sm md:text-base rounded-full hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-1 md:gap-2"
         >
           <span className="hidden sm:inline">Send</span>
-          <span className="text-base md:text-lg">📤</span>
+          <span className="text-sm sm:text-base md:text-lg">📤</span>
         </button>
       </form>
     </div>

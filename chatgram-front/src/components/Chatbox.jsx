@@ -194,7 +194,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-2 md:p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-200" style={{
+      <div className="flex-1 overflow-y-auto p-1 sm:p-2 md:p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-200" style={{
         backgroundImage: isDarkMode ? "none" : "url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')",
         backgroundSize: "cover"
       }}>
