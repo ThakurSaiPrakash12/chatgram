@@ -573,7 +573,7 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
             <img
               src={viewingImage.url}
               alt={viewingImage.name}
-              className="max-w-full max-h-[80vh] rounded-2xl shadow-2xl object-contain"
+              className="max-w-[75vw] max-h-[80vh] rounded-2xl shadow-2xl object-contain"
             />
           </div>
         </div>
