@@ -15,7 +15,6 @@ function ChatBox({ chat, user, setCurrentChat }) {
   const [messages, setMessages] = useState([]);
   const [typingUser, setTypingUser] = useState("");
   const [showGroupInfo, setShowGroupInfo] = useState(false);
-  const [viewingImage, setViewingImage] = useState(null);
   const messagesEndRef = useRef(null);
 
   const currentUserId = user?.user?._id;
@@ -243,7 +242,6 @@ function ChatBox({ chat, user, setCurrentChat }) {
               key={msg._id || index} 
               message={msg} 
               isOwn={senderId === currentUserId}
-              onImageClick={setViewingImage}
               onDelete={handleDeleteMessage}
             />
           );
@@ -275,69 +273,6 @@ function ChatBox({ chat, user, setCurrentChat }) {
             setShowGroupInfo(false);
           }}
         />
-      )}
-
-      {/* Image Viewer Modal - Enhanced with Download & Fullscreen */}
-      {viewingImage && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-95 flex flex-col items-center justify-center z-50 p-2 sm:p-4"
-          onClick={() => setViewingImage(null)}
-        >
-          {/* Top Action Bar */}
-          <div className="w-full max-w-6xl flex justify-between items-center mb-2 sm:mb-4 px-2" onClick={(e) => e.stopPropagation()}>
-            {/* User Info */}
-            <div className="text-white">
-              <p className="text-sm sm:text-lg font-semibold flex items-center gap-1 sm:gap-2">
-                <span className="text-base sm:text-xl">👤</span>
-                <span className="truncate max-w-[150px] sm:max-w-none">{viewingImage.name}</span>
-              </p>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-2 sm:gap-3">
-              {/* Download Button */}
-              <a
-                href={viewingImage.url}
-                download={`chatgram-image-${Date.now()}.jpg`}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-1 sm:gap-2"
-                title="Download image"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <span className="text-sm sm:text-base">⬇️</span>
-                <span className="hidden sm:inline">Download</span>
-              </a>
-
-              {/* Close Button */}
-              <button
-                onClick={() => setViewingImage(null)}
-                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-1 sm:gap-2"
-                title="Close"
-              >
-                <span className="text-sm sm:text-base">✕</span>
-                <span className="hidden sm:inline">Close</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Image Container */}
-          <div className="relative w-full max-w-3xl h-full flex items-center justify-center p-2 sm:p-4" onClick={(e) => e.stopPropagation()}>
-            <img
-              src={viewingImage.url}
-              alt={viewingImage.name}
-              className="max-w-[60vw] max-h-[70vh] sm:max-h-[75vh] md:max-h-[80vh] w-auto h-auto rounded-lg sm:rounded-2xl shadow-2xl object-contain"
-              title="View image"
-            />
-          </div>
-
-          {/* Bottom Hint */}
-          <div className="mt-2 sm:mt-4 text-white text-xs sm:text-sm opacity-70 text-center" onClick={(e) => e.stopPropagation()}>
-            <p className="flex items-center justify-center gap-2">
-              <span>💡</span>
-              <span className="hidden sm:inline">Click outside to close</span>
-              <span className="sm:hidden">Tap outside to close</span>
-            </p>
-          </div>
-        </div>
       )}
     </div>
   );

@@ -19,7 +19,6 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
   const [groupName, setGroupName] = useState("");
   const [groupImage, setGroupImage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [viewingImage, setViewingImage] = useState(null);
   
   const userData = JSON.parse(localStorage.getItem("chatgramUser"));
   const currentUserId = userData?.user?._id;
@@ -499,13 +498,7 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
               key={chat._id}
               className="p-2 md:p-3 rounded-xl hover:bg-white dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2 md:gap-3 transition-all duration-200 bg-gray-50 dark:bg-gray-800 hover:shadow-md border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500"
             >
-              <div 
-                className="relative flex-shrink-0"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setViewingImage({ url: chatImage, name: chatName });
-                }}
-              >
+              <div className="relative flex-shrink-0">
                 <img
                   src={chatImage}
                   alt={chatName}
@@ -544,40 +537,6 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
           );
         })}
       </ul>
-
-      {/* Image Viewer Modal */}
-      {viewingImage && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
-          onClick={() => setViewingImage(null)}
-        >
-          <div className="relative max-w-4xl max-h-screen" onClick={(e) => e.stopPropagation()}>
-            {/* Close Button */}
-            <button
-              onClick={() => setViewingImage(null)}
-              className="absolute -top-12 right-0 text-white text-4xl hover:text-gray-300 transition-colors"
-              title="Close"
-            >
-              ×
-            </button>
-            
-            {/* User Info */}
-            <div className="absolute -top-12 left-0 text-white mb-4">
-              <p className="text-lg font-semibold flex items-center gap-2">
-                <span>👤</span>
-                {viewingImage.name}
-              </p>
-            </div>
-
-            {/* Image */}
-            <img
-              src={viewingImage.url}
-              alt={viewingImage.name}
-              className="max-w-[60vw] max-h-[80vh] rounded-2xl shadow-2xl object-contain"
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

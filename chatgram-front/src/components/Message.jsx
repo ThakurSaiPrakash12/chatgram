@@ -57,17 +57,22 @@ function Message({ message, isOwn, onImageClick, onDelete }) {
         
         {/* Display image message */}
         {message.messageType === "image" && message.imageUrl ? (
-          <div className="mb-1.5 sm:mb-2">
+          <div className="mb-1.5 sm:mb-2 relative group">
             <img
               src={message.imageUrl}
               alt="Shared"
-              className="w-full max-w-[200px] sm:max-w-[250px] md:max-w-[300px] lg:max-w-[350px] h-auto object-cover rounded-lg cursor-pointer hover:opacity-90 hover:shadow-xl transition-all"
-              onClick={() => onImageClick && onImageClick({
-                url: message.imageUrl,
-                name: message.sender?.name || (isOwn ? "You" : "User")
-              })}
-              title="Click to view & download"
+              className="w-full max-w-[200px] sm:max-w-[250px] md:max-w-[300px] lg:max-w-[350px] h-auto object-cover rounded-lg"
             />
+            {/* Download/Save Button */}
+            <a
+              href={message.imageUrl}
+              download={`chatgram-image-${Date.now()}.jpg`}
+              className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white p-1.5 sm:p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center justify-center"
+              title="Download image"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span className="text-sm sm:text-base">⬇️</span>
+            </a>
           </div>
         ) : (
           <div className="text-[13px] sm:text-sm md:text-base leading-relaxed">{message.content}</div>
