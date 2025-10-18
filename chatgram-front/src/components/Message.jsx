@@ -1,17 +1,33 @@
 // src/components/Message.jsx
-import React from "react";
+import React, { useState } from "react";
 import { getUserAvatar } from "../utils/avatarHelper";
 
-function Message({ message, isOwn, onImageClick }) {
+function Message({ message, isOwn, onImageClick, onDelete }) {
+  const [showDeleteOption, setShowDeleteOption] = useState(false);
+
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
   };
 
+  const canDelete = () => {
+    if (!isOwn) return false;
+    const messageAge = Date.now() - new Date(message.createdAt).getTime();
+    const oneHour = 60 * 60 * 1000;
+    return messageAge <= oneHour;
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Delete this message for everyone? This cannot be undone.')) {
+      onDelete(message._id);
+    }
+    setShowDeleteOption(false);
+  };
+
   const senderAvatar = getUserAvatar(message.sender);
 
   return (
-    <div className={`flex mb-2 sm:mb-3 md:mb-4 ${isOwn ? "justify-end" : "justify-start"} animate-fade-in px-2 sm:px-0`}>
+    <div className={`flex mb-2 sm:mb-3 md:mb-4 ${isOwn ? "justify-end" : "justify-start"} animate-fade-in px-2 sm:px-0 group`}>
       {!isOwn && (
         <img
           src={senderAvatar}
@@ -24,13 +40,14 @@ function Message({ message, isOwn, onImageClick }) {
           title="Click to view profile picture"
         />
       )}
-      <div
-        className={`max-w-[80%] sm:max-w-[75%] md:max-w-md px-2.5 sm:px-3 md:px-5 py-1.5 sm:py-2 md:py-3 rounded-2xl break-words shadow-md transition-all hover:shadow-lg ${
-          isOwn
-            ? "bg-gradient-to-br from-green-400 to-green-500 dark:from-green-600 dark:to-green-700 text-white rounded-br-none"
-            : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-none border border-gray-100 dark:border-gray-700"
-        }`}
-      >
+      <div className="relative">
+        <div
+          className={`max-w-[80%] sm:max-w-[75%] md:max-w-md px-2.5 sm:px-3 md:px-5 py-1.5 sm:py-2 md:py-3 rounded-2xl break-words shadow-md transition-all hover:shadow-lg ${
+            isOwn
+              ? "bg-gradient-to-br from-green-400 to-green-500 dark:from-green-600 dark:to-green-700 text-white rounded-br-none"
+              : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-none border border-gray-100 dark:border-gray-700"
+          }`}
+        >
         {!isOwn && message.sender?.name && (
           <div className="text-[10px] sm:text-xs font-bold text-blue-600 dark:text-blue-400 mb-0.5 sm:mb-1 flex items-center gap-1">
             <span className="text-xs">👤</span>
@@ -40,7 +57,7 @@ function Message({ message, isOwn, onImageClick }) {
         
         {/* Display image message */}
         {message.messageType === "image" && message.imageUrl ? (
-          <div className="mb-1.5 sm:mb-2">
+          <div className="mb-1.5 sm:mb-2 relative group">
             <img
               src={message.imageUrl}
               alt="Shared"
@@ -49,8 +66,12 @@ function Message({ message, isOwn, onImageClick }) {
                 url: message.imageUrl,
                 name: message.sender?.name || (isOwn ? "You" : "User")
               })}
-              title="Click to view full image"
+              title="Click to view & download"
             />
+            {/* Hover overlay with icon */}
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all rounded-lg flex items-center justify-center">
+              <span className="opacity-0 group-hover:opacity-100 text-3xl sm:text-4xl transition-opacity">🔍</span>
+            </div>
           </div>
         ) : (
           <div className="text-[13px] sm:text-sm md:text-base leading-relaxed">{message.content}</div>
@@ -61,7 +82,20 @@ function Message({ message, isOwn, onImageClick }) {
           {formatTime(message.createdAt || Date.now())}
           {isOwn && <span className="ml-0.5 sm:ml-1 text-[10px]">✓✓</span>}
         </div>
+        </div>
+
+        {/* Delete Button - Show on hover for own messages within 1 hour */}
+        {isOwn && canDelete() && (
+          <button
+            onClick={handleDelete}
+            className="absolute -right-8 sm:-right-10 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center shadow-lg text-xs sm:text-sm"
+            title="Delete for everyone (within 1 hour)"
+          >
+            🗑️
+          </button>
+        )}
       </div>
+
       {isOwn && (
         <img
           src={senderAvatar}
