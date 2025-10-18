@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { getUserAvatar, getGroupAvatar } from "../utils/avatarHelper";
 import { useTheme } from "../context/ThemeContext";
+import { API_BASE_URL, SOCKET_URL } from "../config/api";
 
 function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
     if (!currentUserId) return;
 
     // Initialize socket connection
-    socketRef.current = io("http://localhost:5000", {
+    socketRef.current = io(SOCKET_URL, {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
@@ -57,7 +58,7 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:5000/api/auth/search?q=${query}`, {
+      const res = await fetch(`${API_BASE_URL}/api/auth/search?q=${query}`, {
         headers: {
           'Authorization': `Bearer ${userData.token}`,
         }
@@ -93,7 +94,7 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
   const createChat = async (userId) => {
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:5000/api/chats', {
+      const res = await fetch(`${API_BASE_URL}/api/chats`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +127,7 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
     
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:5000/api/chats/group', {
+      const res = await fetch(`${API_BASE_URL}/api/chats/group`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
