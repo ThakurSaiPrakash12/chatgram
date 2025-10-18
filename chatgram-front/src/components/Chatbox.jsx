@@ -147,26 +147,35 @@ function ChatBox({ chat, user, setCurrentChat }) {
   }
 
   return (
-    <div className="flex-1 flex flex-col h-screen">
+    <div className="flex-1 flex flex-col h-screen w-full">
       {/* Chat Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 p-5 flex items-center gap-4 shadow-2xl">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 p-3 md:p-5 flex items-center gap-2 md:gap-4 shadow-2xl">
+        {/* Back button for mobile */}
+        <button
+          onClick={() => setCurrentChat(null)}
+          className="md:hidden w-8 h-8 flex items-center justify-center text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all"
+          title="Back to chats"
+        >
+          <span className="text-2xl">←</span>
+        </button>
+        
         <img
           src={chatImage}
           alt={chatName}
-          className="w-14 h-14 rounded-full object-cover border-3 border-white dark:border-gray-800 shadow-xl cursor-pointer hover:scale-110 transition-transform"
+          className="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover border-2 md:border-3 border-white dark:border-gray-800 shadow-xl cursor-pointer hover:scale-110 transition-transform"
           onClick={() => setViewingImage({ url: chatImage, name: chatName })}
           title="Click to view profile picture"
         />
-        <div className="flex-1">
-          <h2 className="font-bold text-white text-xl">{chatName}</h2>
+        <div className="flex-1 min-w-0">
+          <h2 className="font-bold text-white text-base md:text-xl truncate">{chatName}</h2>
           {chat.isGroupChat && (
-            <p className="text-sm text-blue-100 dark:text-blue-200 flex items-center gap-1 font-medium">
+            <p className="text-xs md:text-sm text-blue-100 dark:text-blue-200 flex items-center gap-1 font-medium">
               <span>👥</span>
               {chat.users?.length} members
             </p>
           )}
           {!chat.isGroupChat && chatPartner?.about && (
-            <p className="text-sm text-blue-100 dark:text-blue-200 italic">{chatPartner.about}</p>
+            <p className="text-xs md:text-sm text-blue-100 dark:text-blue-200 italic truncate">{chatPartner.about}</p>
           )}
         </div>
         {/* Action Icons */}
@@ -174,7 +183,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
           {chat.isGroupChat && (
             <button 
               onClick={() => setShowGroupInfo(true)}
-              className="w-11 h-11 bg-white bg-opacity-20 hover:bg-opacity-30 dark:bg-gray-800 dark:bg-opacity-40 dark:hover:bg-opacity-60 rounded-full flex items-center justify-center transition-all text-white text-2xl shadow-lg hover:shadow-xl"
+              className="w-9 h-9 md:w-11 md:h-11 bg-white bg-opacity-20 hover:bg-opacity-30 dark:bg-gray-800 dark:bg-opacity-40 dark:hover:bg-opacity-60 rounded-full flex items-center justify-center transition-all text-white text-xl md:text-2xl shadow-lg hover:shadow-xl"
               title="Group Info"
             >
               ℹ️
@@ -184,7 +193,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-200" style={{
+      <div className="flex-1 overflow-y-auto p-2 md:p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-200" style={{
         backgroundImage: isDarkMode ? "none" : "url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')",
         backgroundSize: "cover"
       }}>

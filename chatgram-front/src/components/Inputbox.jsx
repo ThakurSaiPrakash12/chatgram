@@ -85,13 +85,13 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
     <div className="border-t dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg transition-colors duration-200">
       {/* Image Preview */}
       {previewImage && (
-        <div className="p-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-start gap-3">
+        <div className="p-2 md:p-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-start gap-2 md:gap-3">
             <div className="relative">
               <img 
                 src={previewImage} 
                 alt="Preview" 
-                className="w-24 h-24 object-cover rounded-lg"
+                className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg"
               />
               <button
                 onClick={() => {
@@ -99,16 +99,17 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
                   setPreviewImage(null);
                   if (fileInputRef.current) fileInputRef.current.value = "";
                 }}
-                className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 dark:bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
+                className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 text-xs md:text-sm bg-red-500 dark:bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
               >
                 ✕
               </button>
             </div>
             <button
               onClick={handleSendImage}
-              className="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 dark:from-green-600 dark:to-teal-600 text-white rounded-lg hover:from-green-600 hover:to-teal-600 dark:hover:from-green-700 dark:hover:to-teal-700 transition-all"
+              className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base bg-gradient-to-r from-green-500 to-teal-500 dark:from-green-600 dark:to-teal-600 text-white rounded-lg hover:from-green-600 hover:to-teal-600 dark:hover:from-green-700 dark:hover:to-teal-700 transition-all"
             >
-              Send Image 📤
+              <span className="hidden sm:inline">Send Image 📤</span>
+              <span className="sm:hidden">Send 📤</span>
             </button>
           </div>
         </div>
@@ -116,13 +117,13 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
 
       {/* Emoji Picker */}
       {showEmojiPicker && (
-        <div className="p-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex flex-wrap gap-2">
+        <div className="p-2 md:p-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex flex-wrap gap-1 md:gap-2">
             {commonEmojis.map((emoji, index) => (
               <button
                 key={index}
                 onClick={() => addEmoji(emoji)}
-                className="text-2xl hover:bg-gray-200 dark:hover:bg-gray-700 rounded p-1 transition-colors"
+                className="text-xl md:text-2xl hover:bg-gray-200 dark:hover:bg-gray-700 rounded p-1 transition-colors"
                 type="button"
               >
                 {emoji}
@@ -133,7 +134,7 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
       )}
 
       {/* Input Form */}
-      <form onSubmit={handleSend} className="flex items-center p-4">
+      <form onSubmit={handleSend} className="flex items-center p-2 md:p-4 gap-1 md:gap-0">
         {/* Hidden File Input */}
         <input
           ref={fileInputRef}
@@ -147,7 +148,7 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="mr-3 text-2xl hover:scale-110 transition-transform"
+          className="mr-1 md:mr-3 text-xl md:text-2xl hover:scale-110 transition-transform p-2 md:p-0"
           title="Attach image"
         >
           📎
@@ -159,14 +160,14 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
           placeholder="Type a message..."
           value={text}
           onChange={handleTyping}
-          className="flex-1 px-4 py-3 rounded-full border-2 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+          className="flex-1 px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-full border-2 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
         />
 
         {/* Emoji Button */}
         <button
           type="button"
           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-          className="mx-3 text-2xl hover:scale-110 transition-transform"
+          className="mx-1 md:mx-3 text-xl md:text-2xl hover:scale-110 transition-transform p-2 md:p-0"
           title="Emoji"
         >
           😊
@@ -175,10 +176,10 @@ function InputBox({ onSendMessage, chatId, socket, userName }) {
         {/* Send Button */}
         <button
           type="submit"
-          className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white px-6 py-3 rounded-full hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white px-4 py-2 md:px-6 md:py-3 text-sm md:text-base rounded-full hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-1 md:gap-2"
         >
-          <span>Send</span>
-          <span className="text-lg">📤</span>
+          <span className="hidden sm:inline">Send</span>
+          <span className="text-base md:text-lg">📤</span>
         </button>
       </form>
     </div>

@@ -168,81 +168,83 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
   };
 
   return (
-    <div className="w-1/4 bg-gradient-to-b from-blue-50 via-purple-50 to-pink-50 dark:from-gray-800 dark:via-gray-850 dark:to-gray-900 p-5 border-r dark:border-gray-700 h-full flex flex-col shadow-2xl transition-colors duration-200">
+    <div className="w-full h-full bg-gradient-to-b from-blue-50 via-purple-50 to-pink-50 dark:from-gray-800 dark:via-gray-850 dark:to-gray-900 p-3 md:p-5 border-r dark:border-gray-700 flex flex-col shadow-2xl transition-colors duration-200">
       {/* Header with Profile Picture and Theme Toggle */}
-      <div className="flex justify-between items-center mb-6 pb-5 border-b-2 border-purple-200 dark:border-gray-700">
-        <div className="flex items-center gap-3">
+      <div className="flex justify-between items-center mb-4 md:mb-6 pb-3 md:pb-5 border-b-2 border-purple-200 dark:border-gray-700">
+        <div className="flex items-center gap-2 md:gap-3">
           <div className="relative cursor-pointer group" onClick={() => navigate("/profile")}>
             <img
               src={getUserAvatar(userData?.user)}
               alt="Profile"
-              className="w-14 h-14 rounded-full border-3 border-purple-500 dark:border-purple-600 group-hover:border-purple-600 dark:group-hover:border-purple-500 transition-all shadow-lg object-cover"
+              className="w-10 h-10 md:w-14 md:h-14 rounded-full border-3 border-purple-500 dark:border-purple-600 group-hover:border-purple-600 dark:group-hover:border-purple-500 transition-all shadow-lg object-cover"
             />
-            <div className="absolute -bottom-1 -right-1 bg-green-500 w-5 h-5 rounded-full border-3 border-white dark:border-gray-800 shadow-md"></div>
+            <div className="absolute -bottom-1 -right-1 bg-green-500 w-3 h-3 md:w-5 md:h-5 rounded-full border-2 md:border-3 border-white dark:border-gray-800 shadow-md"></div>
           </div>
-          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">💬 ChatGram</h2>
+          <h2 className="text-lg md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">💬 <span className="hidden sm:inline">ChatGram</span></h2>
         </div>
         
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="p-3 rounded-xl bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 shadow-md hover:shadow-lg transition-all duration-200 group"
+          className="p-2 md:p-3 rounded-xl bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 shadow-md hover:shadow-lg transition-all duration-200 group"
           title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
           {isDarkMode ? (
-            <span className="text-2xl group-hover:scale-110 transition-transform inline-block">☀️</span>
+            <span className="text-xl md:text-2xl group-hover:scale-110 transition-transform inline-block">☀️</span>
           ) : (
-            <span className="text-2xl group-hover:scale-110 transition-transform inline-block">🌙</span>
+            <span className="text-xl md:text-2xl group-hover:scale-110 transition-transform inline-block">🌙</span>
           )}
         </button>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3 mb-5">
+      <div className="flex gap-2 md:gap-3 mb-3 md:mb-5">
         <button
           onClick={() => setShowNewChat(true)}
-          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 text-white px-4 py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 dark:hover:from-blue-600 dark:hover:to-purple-600 font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 text-white px-2 md:px-4 py-2 md:py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 dark:hover:from-blue-600 dark:hover:to-purple-600 font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-1 md:gap-2 text-sm md:text-base"
           title="Start a new chat"
         >
-          <span className="text-xl">💭</span>
-          <span>New Chat</span>
+          <span className="text-lg md:text-xl">💭</span>
+          <span className="hidden sm:inline">New Chat</span>
+          <span className="sm:hidden">Chat</span>
         </button>
         <button
           onClick={() => setShowNewGroup(true)}
-          className="flex-1 bg-gradient-to-r from-green-600 to-teal-600 dark:from-green-500 dark:to-teal-500 text-white px-4 py-3 rounded-xl hover:from-green-700 hover:to-teal-700 dark:hover:from-green-600 dark:hover:to-teal-600 font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+          className="flex-1 bg-gradient-to-r from-green-600 to-teal-600 dark:from-green-500 dark:to-teal-500 text-white px-2 md:px-4 py-2 md:py-3 rounded-xl hover:from-green-700 hover:to-teal-700 dark:hover:from-green-600 dark:hover:to-teal-600 font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-1 md:gap-2 text-sm md:text-base"
           title="Create a new group"
         >
-          <span className="text-xl">👥</span>
-          <span>New Group</span>
+          <span className="text-lg md:text-xl">👥</span>
+          <span className="hidden sm:inline">New Group</span>
+          <span className="sm:hidden">Group</span>
         </button>
       </div>
 
       {/* Profile Button */}
-      <div className="mb-5">
+      <div className="mb-3 md:mb-5">
         <button
           onClick={() => navigate("/profile")}
-          className="w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-5 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 border border-purple-200 dark:border-gray-600"
+          className="w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 md:px-5 py-2 md:py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 border border-purple-200 dark:border-gray-600 text-sm md:text-base"
         >
-          <span className="text-xl">👤</span>
+          <span className="text-lg md:text-xl">👤</span>
           <span>View Profile</span>
         </button>
       </div>
 
       {/* Search Bar */}
-      <div className="mb-5">
+      <div className="mb-3 md:mb-5">
         <div className="relative">
-          <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl">🔍</span>
+          <span className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-lg md:text-xl">🔍</span>
           <input
             type="text"
             placeholder="Search messages..."
-            className="w-full pl-12 pr-4 py-3.5 border border-purple-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent shadow-md font-medium bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors duration-200"
+            className="w-full pl-10 md:pl-12 pr-3 md:pr-4 py-2.5 md:py-3.5 border border-purple-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent shadow-md font-medium bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors duration-200 text-sm md:text-base"
           />
         </div>
       </div>
 
       {/* Messages Header */}
-      <div className="mb-4 flex items-center gap-2">
-        <h3 className="text-sm font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider">Messages</h3>
+      <div className="mb-3 md:mb-4 flex items-center gap-2">
+        <h3 className="text-xs md:text-sm font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider">Messages</h3>
         <span className="bg-blue-500 dark:bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-semibold">{chats?.length || 0}</span>
       </div>
 
@@ -494,7 +496,7 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
           return (
             <li
               key={chat._id}
-              className="p-3 rounded-xl hover:bg-white dark:hover:bg-gray-700 cursor-pointer flex items-center gap-3 transition-all duration-200 bg-gray-50 dark:bg-gray-800 hover:shadow-md border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500"
+              className="p-2 md:p-3 rounded-xl hover:bg-white dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2 md:gap-3 transition-all duration-200 bg-gray-50 dark:bg-gray-800 hover:shadow-md border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500"
             >
               <div 
                 className="relative flex-shrink-0"
@@ -506,26 +508,26 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
                 <img
                   src={chatImage}
                   alt={chatName}
-                  className="w-14 h-14 rounded-full object-cover border-3 border-white dark:border-gray-700 shadow-md hover:scale-110 transition-transform"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 md:border-3 border-white dark:border-gray-700 shadow-md hover:scale-110 transition-transform"
                   title="Click to view profile picture"
                 />
                 {isOnline && (
                   <span 
-                    className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full animate-pulse"
+                    className="absolute bottom-0 right-0 w-3 h-3 md:w-4 md:h-4 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full animate-pulse"
                     title="Online"
                   ></span>
                 )}
                 {chat.isGroupChat && (
-                  <span className="absolute -top-1 -right-1 bg-blue-500 dark:bg-blue-600 text-white text-xs px-1.5 py-0.5 rounded-full">
+                  <span className="absolute -top-1 -right-1 bg-blue-500 dark:bg-blue-600 text-white text-xs px-1 md:px-1.5 py-0.5 rounded-full">
                     👥
                   </span>
                 )}
               </div>
               <div className="flex-1 min-w-0" onClick={() => setCurrentChat(chat)}>
                 <div className="flex items-center justify-between mb-1">
-                  <p className="font-semibold text-gray-900 dark:text-gray-100 truncate text-base">{chatName}</p>
+                  <p className="font-semibold text-gray-900 dark:text-gray-100 truncate text-sm md:text-base">{chatName}</p>
                   {isOnline && (
-                    <span className="text-xs text-green-600 dark:text-green-400 font-semibold bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
+                    <span className="hidden sm:inline text-xs text-green-600 dark:text-green-400 font-semibold bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
                       Online
                     </span>
                   )}

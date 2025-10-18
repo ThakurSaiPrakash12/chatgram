@@ -11,12 +11,12 @@ function Message({ message, isOwn, onImageClick }) {
   const senderAvatar = getUserAvatar(message.sender);
 
   return (
-    <div className={`flex mb-4 ${isOwn ? "justify-end" : "justify-start"} animate-fade-in`}>
+    <div className={`flex mb-3 md:mb-4 ${isOwn ? "justify-end" : "justify-start"} animate-fade-in`}>
       {!isOwn && (
         <img
           src={senderAvatar}
           alt={message.sender?.name}
-          className="w-10 h-10 rounded-full object-cover mr-3 shadow-md border-2 border-white dark:border-gray-700 cursor-pointer hover:scale-110 transition-transform"
+          className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover mr-2 md:mr-3 shadow-md border-2 border-white dark:border-gray-700 cursor-pointer hover:scale-110 transition-transform"
           onClick={() => onImageClick && onImageClick({ 
             url: senderAvatar, 
             name: message.sender?.name || "User" 
@@ -25,7 +25,7 @@ function Message({ message, isOwn, onImageClick }) {
         />
       )}
       <div
-        className={`max-w-md px-5 py-3 rounded-2xl break-words shadow-md transition-all hover:shadow-lg ${
+        className={`max-w-[75%] md:max-w-md px-3 md:px-5 py-2 md:py-3 rounded-2xl break-words shadow-md transition-all hover:shadow-lg ${
           isOwn
             ? "bg-gradient-to-br from-green-400 to-green-500 dark:from-green-600 dark:to-green-700 text-white rounded-br-none"
             : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-none border border-gray-100 dark:border-gray-700"
@@ -44,7 +44,7 @@ function Message({ message, isOwn, onImageClick }) {
             <img
               src={message.imageUrl}
               alt="Shared"
-              className="max-w-full max-h-64 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+              className="max-w-full max-h-48 md:max-h-64 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
               onClick={() => onImageClick && onImageClick({
                 url: message.imageUrl,
                 name: message.sender?.name || (isOwn ? "You" : "User")
@@ -53,10 +53,10 @@ function Message({ message, isOwn, onImageClick }) {
             />
           </div>
         ) : (
-          <div className="text-sm leading-relaxed">{message.content}</div>
+          <div className="text-sm md:text-base leading-relaxed">{message.content}</div>
         )}
         
-        <div className={`text-xs mt-2 text-right flex items-center justify-end gap-1 ${isOwn ? 'text-green-100 dark:text-green-200' : 'text-gray-500 dark:text-gray-400'}`}>
+        <div className={`text-xs mt-1.5 md:mt-2 text-right flex items-center justify-end gap-1 ${isOwn ? 'text-green-100 dark:text-green-200' : 'text-gray-500 dark:text-gray-400'}`}>
           <span className="text-xs">🕐</span>
           {formatTime(message.createdAt || Date.now())}
           {isOwn && <span className="ml-1 text-xs">✓✓</span>}
@@ -66,7 +66,7 @@ function Message({ message, isOwn, onImageClick }) {
         <img
           src={senderAvatar}
           alt="You"
-          className="w-10 h-10 rounded-full object-cover ml-3 shadow-md border-2 border-white dark:border-gray-700 cursor-pointer hover:scale-110 transition-transform"
+          className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover ml-2 md:ml-3 shadow-md border-2 border-white dark:border-gray-700 cursor-pointer hover:scale-110 transition-transform"
           onClick={() => onImageClick && onImageClick({ 
             url: senderAvatar, 
             name: message.sender?.name || "You" 

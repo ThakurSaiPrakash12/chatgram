@@ -70,7 +70,28 @@ Backend → `http://localhost:5000`
 
 ---
 
-## 🔧 Environment Variables
+## � Deployment
+
+Want to deploy ChatGram so everyone can use it? We've got you covered!
+
+### Quick Deploy (100% FREE)
+
+**Recommended Stack:**
+- 🎨 Frontend: **Vercel** (React/Vite)
+- ⚙️ Backend: **Render** (Node.js + Socket.IO)
+- 💾 Database: **MongoDB Atlas** (Cloud MongoDB)
+
+📘 **[Read Full Deployment Guide](DEPLOYMENT_GUIDE.md)** - Detailed step-by-step instructions
+
+✅ **[Quick Deployment Checklist](DEPLOYMENT_CHECKLIST.md)** - Fast deployment in 20 minutes
+
+### One-Click Deployment
+
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ThakurSaiPrakash12/chatgram&project-name=chatgram&root-directory=chatgram-front)
+
+---
+
+## �🔧 Environment Variables
 
 **Backend (.env)**  
 ```env

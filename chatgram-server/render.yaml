@@ -1,0 +1,19 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: chatgram-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false # Set this manually in Render dashboard
+      - key: JWT_SECRET
+        generateValue: true # Render will auto-generate
+    healthCheckPath: /
