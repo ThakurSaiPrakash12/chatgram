@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserAvatar } from "../utils/avatarHelper";
 import { useTheme } from "../context/ThemeContext";
+import { API_BASE_URL } from "../config/api";
 
 function Profile({ user, setUser }) {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ function Profile({ user, setUser }) {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/change-password", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/change-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,7 +68,7 @@ function Profile({ user, setUser }) {
     setAboutSuccess("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/update-profile", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/update-profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,7 +127,7 @@ function Profile({ user, setUser }) {
         const base64String = reader.result;
         
         // Update profile picture
-        const res = await fetch("http://localhost:5000/api/auth/update-profile", {
+        const res = await fetch(`${API_BASE_URL}/api/auth/update-profile`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

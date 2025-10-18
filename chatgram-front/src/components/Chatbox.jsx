@@ -6,8 +6,9 @@ import Message from "./Message";
 import GroupInfo from "./GroupInfo";
 import { getUserAvatar, getGroupAvatar } from "../utils/avatarHelper";
 import { useTheme } from "../context/ThemeContext";
+import { API_BASE_URL, SOCKET_URL } from "../config/api";
 
-const socket = io("http://localhost:5000");
+const socket = io(SOCKET_URL);
 
 function ChatBox({ chat, user, setCurrentChat }) {
   const { isDarkMode } = useTheme();
@@ -72,7 +73,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
 
   const fetchMessages = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/messages/${chat._id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/messages/${chat._id}`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         }
@@ -107,7 +108,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
 
       console.log('Sending message:', payload);
 
-      const res = await fetch("http://localhost:5000/api/messages", {
+      const res = await fetch(`${API_BASE_URL}/api/messages`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

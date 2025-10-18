@@ -1,6 +1,7 @@
 // src/components/GroupInfo.jsx
 import { useState } from "react";
 import { getUserAvatar, getGroupAvatar } from "../utils/avatarHelper";
+import { API_BASE_URL } from "../config/api";
 
 function GroupInfo({ chat, user, onClose, onUpdate }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,7 +20,7 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:5000/api/auth/search?q=${query}`, {
+      const res = await fetch(`${API_BASE_URL}/api/auth/search?q=${query}`, {
         headers: {
           'Authorization': `Bearer ${userData.token}`,
         }
@@ -38,7 +39,7 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
   const addMember = async (userId) => {
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:5000/api/chats/group/add', {
+      const res = await fetch(`${API_BASE_URL}/api/chats/group/add`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
 
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:5000/api/chats/group/remove', {
+      const res = await fetch(`${API_BASE_URL}/api/chats/group/remove`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -107,7 +108,7 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
     try {
       setLoading(true);
       // Use the remove route to remove yourself
-      const res = await fetch('http://localhost:5000/api/chats/group/remove', {
+      const res = await fetch(`${API_BASE_URL}/api/chats/group/remove`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +162,7 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
         const base64String = reader.result;
         
         // Update group image
-        const res = await fetch('http://localhost:5000/api/chats/group/image', {
+        const res = await fetch(`${API_BASE_URL}/api/chats/group/image`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

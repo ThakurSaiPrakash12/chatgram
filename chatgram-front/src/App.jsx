@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import { ThemeProvider } from "./context/ThemeContext";
+import { API_BASE_URL } from "./config/api";
 
 function App() {
   const [chats, setChats] = useState([]);
@@ -28,7 +29,7 @@ function App() {
       try {
         if (!user?.user?._id) return;
         
-        const res = await fetch(`http://localhost:5000/api/chats/${user.user._id}`, {
+        const res = await fetch(`${API_BASE_URL}/api/chats/${user.user._id}`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
             'Accept': 'application/json'
@@ -69,7 +70,7 @@ function App() {
     try {
       if (!user?.user?._id) return;
       
-      const res = await fetch(`http://localhost:5000/api/chats/${user.user._id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/chats/${user.user._id}`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
           'Accept': 'application/json'
