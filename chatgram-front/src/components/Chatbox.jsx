@@ -5,10 +5,12 @@ import InputBox from "./Inputbox";
 import Message from "./Message";
 import GroupInfo from "./GroupInfo";
 import { getUserAvatar, getGroupAvatar } from "../utils/avatarHelper";
+import { useTheme } from "../context/ThemeContext";
 
 const socket = io("http://localhost:5000");
 
 function ChatBox({ chat, user, setCurrentChat }) {
+  const { isDarkMode } = useTheme();
   const [messages, setMessages] = useState([]);
   const [typingUser, setTypingUser] = useState("");
   const [showGroupInfo, setShowGroupInfo] = useState(false);
@@ -132,13 +134,13 @@ function ChatBox({ chat, user, setCurrentChat }) {
 
   if (!chat) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 transition-colors duration-200">
         <div className="text-center">
           <div className="text-8xl mb-6">💬</div>
-          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-3">
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-3">
             ChatGram
           </h2>
-          <p className="text-gray-600 text-lg">Select a chat to start messaging</p>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Select a chat to start messaging</p>
         </div>
       </div>
     );
@@ -147,24 +149,24 @@ function ChatBox({ chat, user, setCurrentChat }) {
   return (
     <div className="flex-1 flex flex-col h-screen">
       {/* Chat Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-5 flex items-center gap-4 shadow-2xl">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 p-5 flex items-center gap-4 shadow-2xl">
         <img
           src={chatImage}
           alt={chatName}
-          className="w-14 h-14 rounded-full object-cover border-3 border-white shadow-xl cursor-pointer hover:scale-110 transition-transform"
+          className="w-14 h-14 rounded-full object-cover border-3 border-white dark:border-gray-800 shadow-xl cursor-pointer hover:scale-110 transition-transform"
           onClick={() => setViewingImage({ url: chatImage, name: chatName })}
           title="Click to view profile picture"
         />
         <div className="flex-1">
           <h2 className="font-bold text-white text-xl">{chatName}</h2>
           {chat.isGroupChat && (
-            <p className="text-sm text-blue-100 flex items-center gap-1 font-medium">
+            <p className="text-sm text-blue-100 dark:text-blue-200 flex items-center gap-1 font-medium">
               <span>👥</span>
               {chat.users?.length} members
             </p>
           )}
           {!chat.isGroupChat && chatPartner?.about && (
-            <p className="text-sm text-blue-100 italic">{chatPartner.about}</p>
+            <p className="text-sm text-blue-100 dark:text-blue-200 italic">{chatPartner.about}</p>
           )}
         </div>
         {/* Action Icons */}
@@ -172,7 +174,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
           {chat.isGroupChat && (
             <button 
               onClick={() => setShowGroupInfo(true)}
-              className="w-11 h-11 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full flex items-center justify-center transition-all text-white text-2xl shadow-lg hover:shadow-xl"
+              className="w-11 h-11 bg-white bg-opacity-20 hover:bg-opacity-30 dark:bg-gray-800 dark:bg-opacity-40 dark:hover:bg-opacity-60 rounded-full flex items-center justify-center transition-all text-white text-2xl shadow-lg hover:shadow-xl"
               title="Group Info"
             >
               ℹ️
@@ -182,8 +184,8 @@ function ChatBox({ chat, user, setCurrentChat }) {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-50" style={{
-        backgroundImage: "url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')",
+      <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-200" style={{
+        backgroundImage: isDarkMode ? "none" : "url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')",
         backgroundSize: "cover"
       }}>
         {messages.map((msg, index) => {
@@ -198,7 +200,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
           );
         })}
         {typingUser && (
-          <div className="text-sm text-gray-500 italic ml-4">
+          <div className="text-sm text-gray-500 dark:text-gray-400 italic ml-4">
             {typingUser} is typing...
           </div>
         )}

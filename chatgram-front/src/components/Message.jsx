@@ -16,7 +16,7 @@ function Message({ message, isOwn, onImageClick }) {
         <img
           src={senderAvatar}
           alt={message.sender?.name}
-          className="w-10 h-10 rounded-full object-cover mr-3 shadow-md border-2 border-white cursor-pointer hover:scale-110 transition-transform"
+          className="w-10 h-10 rounded-full object-cover mr-3 shadow-md border-2 border-white dark:border-gray-700 cursor-pointer hover:scale-110 transition-transform"
           onClick={() => onImageClick && onImageClick({ 
             url: senderAvatar, 
             name: message.sender?.name || "User" 
@@ -27,12 +27,12 @@ function Message({ message, isOwn, onImageClick }) {
       <div
         className={`max-w-md px-5 py-3 rounded-2xl break-words shadow-md transition-all hover:shadow-lg ${
           isOwn
-            ? "bg-gradient-to-br from-green-400 to-green-500 text-white rounded-br-none"
-            : "bg-white text-gray-900 rounded-bl-none border border-gray-100"
+            ? "bg-gradient-to-br from-green-400 to-green-500 dark:from-green-600 dark:to-green-700 text-white rounded-br-none"
+            : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-none border border-gray-100 dark:border-gray-700"
         }`}
       >
         {!isOwn && message.sender?.name && (
-          <div className="text-xs font-bold text-blue-600 mb-1 flex items-center gap-1">
+          <div className="text-xs font-bold text-blue-600 dark:text-blue-400 mb-1 flex items-center gap-1">
             <span>👤</span>
             {message.sender.name}
           </div>
@@ -56,7 +56,7 @@ function Message({ message, isOwn, onImageClick }) {
           <div className="text-sm leading-relaxed">{message.content}</div>
         )}
         
-        <div className={`text-xs mt-2 text-right flex items-center justify-end gap-1 ${isOwn ? 'text-green-100' : 'text-gray-500'}`}>
+        <div className={`text-xs mt-2 text-right flex items-center justify-end gap-1 ${isOwn ? 'text-green-100 dark:text-green-200' : 'text-gray-500 dark:text-gray-400'}`}>
           <span className="text-xs">🕐</span>
           {formatTime(message.createdAt || Date.now())}
           {isOwn && <span className="ml-1 text-xs">✓✓</span>}
@@ -66,7 +66,7 @@ function Message({ message, isOwn, onImageClick }) {
         <img
           src={senderAvatar}
           alt="You"
-          className="w-10 h-10 rounded-full object-cover ml-3 shadow-md border-2 border-white cursor-pointer hover:scale-110 transition-transform"
+          className="w-10 h-10 rounded-full object-cover ml-3 shadow-md border-2 border-white dark:border-gray-700 cursor-pointer hover:scale-110 transition-transform"
           onClick={() => onImageClick && onImageClick({ 
             url: senderAvatar, 
             name: message.sender?.name || "You" 

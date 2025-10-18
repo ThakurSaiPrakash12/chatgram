@@ -5,6 +5,7 @@ import ChatBox from "./components/Chatbox";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
   const [chats, setChats] = useState([]);
@@ -96,49 +97,51 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={
-          <PublicRoute>
-            <Login setUser={setUser} />
-          </PublicRoute>
-        } />
-        <Route path="/signup" element={
-          <PublicRoute>
-            <Signup setUser={setUser} />
-          </PublicRoute>
-        } />
-        <Route path="/profile" element={
-          <PrivateRoute>
-            <Profile user={user} setUser={setUser} />
-          </PrivateRoute>
-        } />
-        <Route path="/" element={
-          <PrivateRoute>
-            <div className="flex h-screen">
-              <Sidebar 
-                user={user}
-                chats={chats} 
-                setCurrentChat={setCurrentChat}
-                refreshChats={refreshChats}
-              />
-              {currentChat ? (
-                <ChatBox 
-                  chat={currentChat}
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={
+            <PublicRoute>
+              <Login setUser={setUser} />
+            </PublicRoute>
+          } />
+          <Route path="/signup" element={
+            <PublicRoute>
+              <Signup setUser={setUser} />
+            </PublicRoute>
+          } />
+          <Route path="/profile" element={
+            <PrivateRoute>
+              <Profile user={user} setUser={setUser} />
+            </PrivateRoute>
+          } />
+          <Route path="/" element={
+            <PrivateRoute>
+              <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+                <Sidebar 
                   user={user}
+                  chats={chats} 
                   setCurrentChat={setCurrentChat}
+                  refreshChats={refreshChats}
                 />
-              ) : (
-                <div className="flex-1 flex items-center justify-center text-gray-400">
-                  Select a chat
-                </div>
-              )}
-            </div>
-          </PrivateRoute>
-        } />
-        <Route path="*" element={<Navigate to={user ? "/" : "/login"} />} />
-      </Routes>
-    </Router>
+                {currentChat ? (
+                  <ChatBox 
+                    chat={currentChat}
+                    user={user}
+                    setCurrentChat={setCurrentChat}
+                  />
+                ) : (
+                  <div className="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                    Select a chat
+                  </div>
+                )}
+              </div>
+            </PrivateRoute>
+          } />
+          <Route path="*" element={<Navigate to={user ? "/" : "/login"} />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 
