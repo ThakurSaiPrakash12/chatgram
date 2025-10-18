@@ -52,4 +52,45 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Delete message for everyone
+router.delete("/:messageId", async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const { userId } = req.body; // User who is deleting
+
+    // Find the message
+    const message = await Message.findById(messageId);
+    
+    if (!message) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    // Check if the user is the sender (only sender can delete for everyone)
+    if (message.sender.toString() !== userId) {
+      return res.status(403).json({ message: "You can only delete your own messages" });
+    }
+
+    // Check if message is within 1 hour (optional time limit)
+    const oneHour = 60 * 60 * 1000; // 1 hour in milliseconds
+    const messageAge = Date.now() - new Date(message.createdAt).getTime();
+    
+    if (messageAge > oneHour) {
+      return res.status(403).json({ message: "Messages older than 1 hour cannot be deleted" });
+    }
+
+    // Delete the message
+    await Message.findByIdAndDelete(messageId);
+
+    res.json({ 
+      success: true, 
+      message: "Message deleted for everyone",
+      messageId,
+      chatId: message.chatId
+    });
+  } catch (err) {
+    console.error("Error deleting message:", err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
 export default router;

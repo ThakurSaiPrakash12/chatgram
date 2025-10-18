@@ -96,6 +96,11 @@ io.on("connection", (socket) => {
     socket.to(messageData.chatId).emit("receive_message", messageData);
   });
 
+  socket.on("delete_message", ({ messageId, chatId }) => {
+    console.log("🗑️ Message deleted:", messageId, "in chat:", chatId);
+    socket.to(chatId).emit("message_deleted", { messageId, chatId });
+  });
+
   socket.on("disconnect", () => {
     for (let userId in onlineUsers) {
       if (onlineUsers[userId] === socket.id) delete onlineUsers[userId];
