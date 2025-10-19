@@ -177,12 +177,15 @@ function Profile({ user, setUser }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-3 sm:p-4 md:p-6 lg:p-8 transition-colors duration-300">
+    <div 
+      className="min-h-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-4 md:p-6 lg:p-8 transition-colors duration-300"
+      style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+    >
       {/* Animated Background Circles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-purple-300 dark:bg-purple-700 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob"></div>
-        <div className="absolute top-40 right-10 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-pink-300 dark:bg-pink-700 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-blue-300 dark:bg-blue-700 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-20 left-10 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-indigo-200 dark:bg-indigo-800 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-40 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-emerald-200 dark:bg-emerald-800 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-40 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-1/2 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-amber-200 dark:bg-amber-800 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
       </div>
 
       <style>{`
@@ -208,7 +211,7 @@ function Profile({ user, setUser }) {
         <div className="flex justify-between items-center mb-4 sm:mb-6 md:mb-8">
           <button
             onClick={() => navigate("/")}
-            className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 text-sm md:text-base rounded-xl sm:rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1 sm:gap-2 md:gap-3 font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+            className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 text-sm md:text-base rounded-xl sm:rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1 sm:gap-2 md:gap-3 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
           >
             <span className="text-lg sm:text-xl md:text-2xl group-hover:-translate-x-1 transition-transform">←</span>
             <span>Back</span>
@@ -230,25 +233,25 @@ function Profile({ user, setUser }) {
         {/* Main Profile Card */}
         <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl md:rounded-[2rem] shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-3xl">
           {/* Profile Header with Gradient Banner */}
-          <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 dark:from-purple-800 dark:via-pink-800 dark:to-red-800 h-24 sm:h-32 md:h-40 lg:h-48 relative overflow-hidden">
-            <div className="absolute inset-0 bg-black/10 dark:bg-black/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+          <div className="bg-gradient-to-r from-indigo-600 via-purple-500 to-emerald-500 h-24 sm:h-32 md:h-40 lg:h-48 relative overflow-hidden">
+            <div className="absolute inset-0 opacity-30 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMyIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')]"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
           </div>
 
           {/* Profile Content */}
           <div className="px-4 sm:px-6 md:px-8 lg:px-10 pb-6 sm:pb-8 md:pb-10">
             {/* Profile Picture and Name - Overlapping Banner */}
-            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 -mt-12 sm:-mt-16 md:-mt-20 lg:-mt-24 mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 -mt-10 sm:-mt-12 md:-mt-14 mb-6 sm:mb-8">
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-tr from-purple-600 to-pink-600 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-fuchsia-500 via-purple-500 to-cyan-400 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300 animate-pulse"></div>
                 <img
                   key={profilePicKey}
                   src={getUserAvatar(userData?.user)}
                   alt={userData?.user?.name}
-                  className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full object-cover border-4 sm:border-6 border-white dark:border-gray-800 shadow-2xl transition-all duration-300 group-hover:scale-105"
+                  className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full object-cover border-4 sm:border-4 border-white dark:border-gray-800 shadow-2xl transition-all duration-300 group-hover:scale-105"
                 />
-                <div className="absolute -bottom-2 -right-2 sm:-bottom-3 sm:-right-3 md:-bottom-4 md:-right-4 bg-green-500 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full border-3 sm:border-4 border-white dark:border-gray-800 shadow-lg flex items-center justify-center">
-                  <span className="text-white text-xs sm:text-sm md:text-base font-bold">✓</span>
+                <div className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 bg-green-500 w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-full border-2 sm:border-3 border-white dark:border-gray-800 shadow-lg flex items-center justify-center animate-pulse">
+                  <span className="text-white text-xs sm:text-xs md:text-sm font-semibold">✓</span>
                 </div>
                 
                 {/* Change Photo Button Overlay */}
@@ -264,22 +267,22 @@ function Profile({ user, setUser }) {
                   className={`absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer ${uploading ? 'opacity-100' : ''}`}
                 >
                   {uploading ? (
-                    <span className="text-3xl sm:text-4xl md:text-5xl animate-spin">⏳</span>
+                    <span className="text-2xl sm:text-3xl md:text-4xl animate-spin">⏳</span>
                   ) : (
                     <div className="text-center">
-                      <span className="text-3xl sm:text-4xl md:text-5xl block">📷</span>
-                      <span className="text-white text-xs sm:text-sm font-bold mt-1 block">Change</span>
+                      <span className="text-2xl sm:text-3xl md:text-4xl block">📷</span>
+                      <span className="text-white text-xs sm:text-xs font-semibold mt-1 block">Change</span>
                     </div>
                   )}
                 </label>
               </div>
 
               <div className="flex-1 text-center sm:text-left">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-1 sm:mb-2 flex items-center justify-center sm:justify-start gap-2 sm:gap-3">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-1 sm:mb-2 flex items-center justify-center sm:justify-start gap-2 sm:gap-3">
                   <span>{userData?.user?.name}</span>
-                  <span className="text-blue-500 dark:text-blue-400 text-xl sm:text-2xl md:text-3xl">✓</span>
+                  <span className="text-cyan-500 dark:text-cyan-400 text-lg sm:text-xl md:text-2xl">✓</span>
                 </h1>
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400 font-medium flex items-center justify-center sm:justify-start gap-2">
+                <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 font-medium flex items-center justify-center sm:justify-start gap-2">
                   <span>📧</span>
                   <span className="break-all">{userData?.user?.email}</span>
                 </p>
@@ -288,7 +291,7 @@ function Profile({ user, setUser }) {
               {/* Logout Button */}
               <button
                 onClick={handleLogout}
-                className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 text-sm md:text-base rounded-xl sm:rounded-2xl hover:from-red-600 hover:to-red-700 dark:hover:from-red-700 dark:hover:to-red-800 font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                className="bg-gradient-to-r from-rose-500 via-red-500 to-orange-500 text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 text-sm md:text-base rounded-xl sm:rounded-2xl hover:from-rose-600 hover:via-red-600 hover:to-orange-600 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2"
               >
                 <span className="text-base sm:text-lg md:text-xl">🚪</span>
                 <span>Logout</span>
@@ -296,9 +299,9 @@ function Profile({ user, setUser }) {
             </div>
 
             {/* About Section */}
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-700/50 dark:to-gray-750/50 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl mb-6 sm:mb-8 md:mb-10 border-2 border-purple-100 dark:border-gray-600 transition-all duration-300 hover:shadow-lg">
+            <div className="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-700/50 dark:to-gray-750/50 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl mb-6 sm:mb-8 md:mb-10 border-2 border-indigo-200 dark:border-gray-600 transition-all duration-300 hover:shadow-lg hover:border-purple-300">
               <div className="flex justify-between items-center mb-3 sm:mb-4">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-2">
                   <span className="text-xl sm:text-2xl md:text-3xl">💬</span>
                   <span>About</span>
                 </h3>
@@ -310,7 +313,7 @@ function Profile({ user, setUser }) {
                       setAboutError("");
                       setAboutSuccess("");
                     }}
-                    className="bg-purple-600 dark:bg-purple-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl hover:bg-purple-700 dark:hover:bg-purple-800 font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
+                    className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 font-semibold transition-all duration-300 hover:scale-105 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm shadow-md hover:shadow-lg"
                   >
                     <span>✏️</span>
                     <span>Edit</span>
@@ -344,7 +347,7 @@ function Profile({ user, setUser }) {
                   <textarea
                     value={about}
                     onChange={(e) => setAbout(e.target.value)}
-                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm sm:text-base"
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent transition-all resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm sm:text-base"
                     rows="3"
                     maxLength="150"
                     placeholder="Tell us about yourself..."
@@ -362,13 +365,13 @@ function Profile({ user, setUser }) {
                         setAboutError("");
                         setAboutSuccess("");
                       }}
-                      className="px-4 py-2 sm:px-5 sm:py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg sm:rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 font-bold transition-all duration-300 hover:scale-105 text-sm sm:text-base"
+                      className="px-4 py-2 sm:px-5 sm:py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg sm:rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold transition-all duration-300 hover:scale-105 text-sm sm:text-base"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 sm:px-5 sm:py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-700 dark:to-pink-700 text-white rounded-lg sm:rounded-xl hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-800 dark:hover:to-pink-800 font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2 text-sm sm:text-base"
+                      className="px-4 py-2 sm:px-5 sm:py-2.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-lg sm:rounded-xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2 text-sm sm:text-base"
                     >
                       <span>💾</span>
                       Save
@@ -381,14 +384,14 @@ function Profile({ user, setUser }) {
             {/* Password Security Section */}
             <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6 sm:pt-8 md:pt-10">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mb-6 sm:mb-8">
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2 sm:gap-3">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-2 sm:gap-3">
                   <span className="text-2xl sm:text-3xl md:text-4xl">🔒</span>
                   <span>Password Security</span>
                 </h3>
                 {!isEditing && (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-700 dark:to-pink-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-xl sm:rounded-2xl hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-800 dark:hover:to-pink-800 font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2 text-sm sm:text-base justify-center sm:justify-start"
+                    className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-xl sm:rounded-2xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2 text-sm sm:text-base justify-center sm:justify-start"
                   >
                     <span>✏️</span>
                     Change Password
@@ -397,7 +400,7 @@ function Profile({ user, setUser }) {
               </div>
 
               {isEditing && (
-                <form onSubmit={handlePasswordChange} className="space-y-4 sm:space-y-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-700/50 dark:to-gray-750/50 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border-2 border-purple-100 dark:border-gray-600">
+                <form onSubmit={handlePasswordChange} className="space-y-4 sm:space-y-6 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-700/50 dark:to-gray-750/50 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border-2 border-purple-200 dark:border-gray-600">
                   {error && (
                     <div className="bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-800 rounded-lg p-3 sm:p-4 animate-shake">
                       <p className="text-red-700 dark:text-red-400 font-medium flex items-center gap-2 text-sm sm:text-base">
@@ -416,7 +419,7 @@ function Profile({ user, setUser }) {
                   )}
                   
                   <div>
-                    <label className="block text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
+                    <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
                       <span>🔑</span>
                       <span>Current Password</span>
                     </label>
@@ -424,14 +427,14 @@ function Profile({ user, setUser }) {
                       type="password"
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm sm:text-base"
+                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-purple-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm sm:text-base"
                       required
                       placeholder="Enter current password"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
+                    <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
                       <span>🆕</span>
                       <span>New Password</span>
                     </label>
@@ -439,14 +442,14 @@ function Profile({ user, setUser }) {
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm sm:text-base"
+                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-purple-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm sm:text-base"
                       required
                       placeholder="Enter new password"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
+                    <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
                       <span>✅</span>
                       <span>Confirm New Password</span>
                     </label>
@@ -454,7 +457,7 @@ function Profile({ user, setUser }) {
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm sm:text-base"
+                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-purple-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm sm:text-base"
                       required
                       placeholder="Confirm new password"
                     />
@@ -471,13 +474,13 @@ function Profile({ user, setUser }) {
                         setNewPassword("");
                         setConfirmPassword("");
                       }}
-                      className="px-4 py-2.5 sm:px-6 sm:py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg sm:rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 font-bold transition-all duration-300 hover:scale-105 text-sm sm:text-base"
+                      className="px-4 py-2.5 sm:px-6 sm:py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg sm:rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold transition-all duration-300 hover:scale-105 text-sm sm:text-base"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-700 dark:to-pink-700 text-white rounded-lg sm:rounded-xl hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-800 dark:hover:to-pink-800 font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base"
+                      className="px-4 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-lg sm:rounded-xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base"
                     >
                       <span>💾</span>
                       Save Password
