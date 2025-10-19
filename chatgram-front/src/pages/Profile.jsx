@@ -291,7 +291,7 @@ function Profile({ user, setUser }) {
               {/* Logout Button */}
               <button
                 onClick={handleLogout}
-                className="bg-gradient-to-r from-rose-500 via-red-500 to-orange-500 text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 text-sm md:text-base rounded-xl sm:rounded-2xl hover:from-rose-600 hover:via-red-600 hover:to-orange-600 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 text-sm md:text-base rounded-xl sm:rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2"
               >
                 <span className="text-base sm:text-lg md:text-xl">🚪</span>
                 <span>Logout</span>
@@ -299,7 +299,7 @@ function Profile({ user, setUser }) {
             </div>
 
             {/* About Section */}
-            <div className="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-700/50 dark:to-gray-750/50 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl mb-6 sm:mb-8 md:mb-10 border-2 border-indigo-200 dark:border-gray-600 transition-all duration-300 hover:shadow-lg hover:border-purple-300">
+            <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl mb-6 sm:mb-8 md:mb-10 border-2 border-indigo-200 dark:border-gray-600 transition-all duration-300 hover:shadow-lg hover:border-purple-300">
               <div className="flex justify-between items-center mb-3 sm:mb-4">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-2">
                   <span className="text-xl sm:text-2xl md:text-3xl">💬</span>
@@ -322,7 +322,7 @@ function Profile({ user, setUser }) {
               </div>
               
               {!isEditingAbout ? (
-                <p className="text-base sm:text-lg md:text-xl text-gray-700 dark:text-gray-300 italic">
+                <p className="text-base sm:text-lg md:text-xl text-gray-800 dark:text-gray-100 italic font-medium">
                   "{userData?.user?.about || "Hey there! I am using ChatGram"}"
                 </p>
               ) : (

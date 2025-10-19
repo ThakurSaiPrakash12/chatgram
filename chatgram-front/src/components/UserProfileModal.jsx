@@ -16,15 +16,15 @@ function UserProfileModal({ user, onClose }) {
         onClick={(e) => e.stopPropagation()}
         style={{ fontFamily: "'Inter', sans-serif" }}
       >
-        <div className="relative h-32 sm:h-40 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30"></div>
+        <div className="relative h-32 sm:h-40 bg-gradient-to-r from-indigo-600 via-purple-500 to-emerald-500 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMyIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30"></div>
           <button onClick={onClose} className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white/20 backdrop-blur-md text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:bg-white/30 flex items-center justify-center font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:rotate-90" title="Close"></button>
         </div>
         <div className="relative px-4 sm:px-6 pb-6">
           <div className="flex flex-col items-center -mt-16 mb-6">
             <div className="relative group mb-4">
-              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full blur-lg opacity-75 group-hover:opacity-100 animate-pulse"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-cyan-400 rounded-full blur-lg opacity-50 group-hover:opacity-75 animate-pulse"></div>
               <div className="relative">
                 <img src={getUserAvatar(user)} alt={user?.name} className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-2xl" />
                 <div className="absolute bottom-0 right-0"><div className="relative"><div className="absolute inset-0 bg-green-400 rounded-full animate-ping opacity-75"></div><div className="relative w-6 h-6 bg-green-500 rounded-full border-3 border-white dark:border-gray-800 shadow-lg flex items-center justify-center"><div className="w-2 h-2 bg-white rounded-full"></div></div></div></div>
@@ -32,16 +32,16 @@ function UserProfileModal({ user, onClose }) {
             </div>
             <div className="text-center mb-4">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">{user?.name}</h2>
-                <span className="text-blue-500 dark:text-blue-400 text-xl" title="Verified"></span>
+                <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">{user?.name}</h2>
+                <span className="text-cyan-500 dark:text-cyan-400 text-xl" title="Verified"></span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{user?.email}</p>
               <div className="inline-flex items-center gap-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-3 py-1 rounded-full text-xs font-medium"><span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Active now</div>
             </div>
-            <button className="w-full mb-6 group bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"><span className="text-xl group-hover:scale-110 transition-transform"></span><span>Send Message</span></button>
-            <div className="w-full bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-5 rounded-2xl border border-indigo-100 dark:border-indigo-800/30">
-              <div className="flex items-center gap-2 mb-3"><span className="text-xl"></span><h3 className="text-base font-bold text-gray-800 dark:text-white">About</h3></div>
-              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed italic">"{user?.about || "Hey there! I am using ChatGram "}"</p>
+            <button className="w-full mb-6 group bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"><span className="text-xl group-hover:scale-110 transition-transform"></span><span>Send Message</span></button>
+            <div className="w-full bg-white dark:bg-gray-800 p-5 rounded-2xl border-2 border-indigo-200 dark:border-gray-600">
+              <div className="flex items-center gap-2 mb-3"><span className="text-xl"></span><h3 className="text-base font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">About</h3></div>
+              <p className="text-sm text-gray-800 dark:text-gray-100 leading-relaxed italic font-medium">"{user?.about || "Hey there! I am using ChatGram "}"</p>
             </div>
           </div>
         </div>
