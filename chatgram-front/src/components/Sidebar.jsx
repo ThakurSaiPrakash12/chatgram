@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 import { getUserAvatar, getGroupAvatar } from "../utils/avatarHelper";
 import { useTheme } from "../context/ThemeContext";
 import { API_BASE_URL, SOCKET_URL } from "../config/api";
+import UserProfileModal from "./UserProfileModal";
 
 function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
   const [groupName, setGroupName] = useState("");
   const [groupImage, setGroupImage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [viewingUserProfile, setViewingUserProfile] = useState(null);
   
   const userData = JSON.parse(localStorage.getItem("chatgramUser"));
   const currentUserId = userData?.user?._id;
@@ -498,12 +500,21 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
               key={chat._id}
               className="p-2 md:p-3 rounded-xl hover:bg-white dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2 md:gap-3 transition-all duration-200 bg-gray-50 dark:bg-gray-800 hover:shadow-md border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500"
             >
-              <div className="relative flex-shrink-0">
+              <div 
+                className="relative flex-shrink-0"
+                onClick={(e) => {
+                  // Only open profile for one-on-one chats, not groups
+                  if (!chat?.isGroupChat && chatPartner) {
+                    e.stopPropagation();
+                    setViewingUserProfile(chatPartner);
+                  }
+                }}
+              >
                 <img
                   src={chatImage}
                   alt={chatName}
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 md:border-3 border-white dark:border-gray-700 shadow-md hover:scale-110 transition-transform"
-                  title="Click to view profile picture"
+                  className={`w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 md:border-3 border-white dark:border-gray-700 shadow-md transition-transform ${!chat?.isGroupChat ? 'hover:scale-110 cursor-pointer' : ''}`}
+                  title={!chat?.isGroupChat ? "Click to view profile" : chatName}
                 />
                 {isOnline && (
                   <span 
@@ -550,6 +561,14 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
           );
         })}
       </ul>
+
+      {/* User Profile Modal */}
+      {viewingUserProfile && (
+        <UserProfileModal 
+          user={viewingUserProfile} 
+          onClose={() => setViewingUserProfile(null)} 
+        />
+      )}
     </div>
   );
 }
