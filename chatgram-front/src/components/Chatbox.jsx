@@ -283,10 +283,6 @@ function ChatBox({ chat, user, setCurrentChat }) {
         <UserProfileModal
           user={viewingUserProfile}
           onClose={() => setViewingUserProfile(null)}
-          onSendMessage={(chat) => {
-            setCurrentChat(chat);
-            setViewingUserProfile(null);
-          }}
         />
       )}
     </div>

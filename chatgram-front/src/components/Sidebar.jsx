@@ -567,10 +567,6 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
         <UserProfileModal 
           user={viewingUserProfile} 
           onClose={() => setViewingUserProfile(null)}
-          onSendMessage={(chat) => {
-            setCurrentChat(chat);
-            setViewingUserProfile(null);
-          }}
         />
       )}
     </div>
