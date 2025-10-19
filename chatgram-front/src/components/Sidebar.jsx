@@ -516,15 +516,28 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
                     👥
                   </span>
                 )}
+                {/* Unread Message Badge - Example with random count */}
+                {chat.unreadCount > 0 && (
+                  <span className="absolute -top-2 -left-2 bg-red-500 text-white text-xs font-bold min-w-[20px] h-5 md:min-w-[24px] md:h-6 flex items-center justify-center rounded-full border-2 border-white dark:border-gray-800 shadow-lg animate-bounce">
+                    {chat.unreadCount > 99 ? '99+' : chat.unreadCount}
+                  </span>
+                )}
               </div>
               <div className="flex-1 min-w-0" onClick={() => setCurrentChat(chat)}>
                 <div className="flex items-center justify-between mb-1">
-                  <p className="font-semibold text-gray-900 dark:text-gray-100 truncate text-sm md:text-base">{chatName}</p>
-                  {isOnline && (
-                    <span className="hidden sm:inline text-xs text-green-600 dark:text-green-400 font-semibold bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
-                      Online
-                    </span>
-                  )}
+                  <p className={`font-semibold truncate text-sm md:text-base ${chat.unreadCount > 0 ? 'text-gray-900 dark:text-white font-bold' : 'text-gray-900 dark:text-gray-100'}`}>{chatName}</p>
+                  <div className="flex items-center gap-1 md:gap-2">
+                    {chat.unreadCount > 0 && (
+                      <span className="bg-red-500 text-white text-[10px] md:text-xs font-bold px-1.5 md:px-2 py-0.5 rounded-full">
+                        {chat.unreadCount > 99 ? '99+' : chat.unreadCount}
+                      </span>
+                    )}
+                    {isOnline && (
+                      <span className="hidden sm:inline text-xs text-green-600 dark:text-green-400 font-semibold bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
+                        Online
+                      </span>
+                    )}
+                  </div>
                 </div>
                 {chat.isGroupChat && (
                   <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{chat.users?.length} members</p>

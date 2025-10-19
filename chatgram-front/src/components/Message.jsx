@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { getUserAvatar } from "../utils/avatarHelper";
 
-function Message({ message, isOwn, onImageClick, onDelete }) {
+function Message({ message, isOwn, onImageClick, onDelete, onUserClick }) {
   const [showDeleteOption, setShowDeleteOption] = useState(false);
 
   const formatTime = (timestamp) => {
@@ -33,11 +33,8 @@ function Message({ message, isOwn, onImageClick, onDelete }) {
           src={senderAvatar}
           alt={message.sender?.name}
           className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full object-cover mr-1.5 sm:mr-2 md:mr-3 shadow-md border-2 border-white dark:border-gray-700 cursor-pointer hover:scale-110 transition-transform flex-shrink-0"
-          onClick={() => onImageClick && onImageClick({ 
-            url: senderAvatar, 
-            name: message.sender?.name || "User" 
-          })}
-          title="Click to view profile picture"
+          onClick={() => onUserClick && onUserClick(message.sender)}
+          title="Click to view profile"
         />
       )}
       <div className="relative">
@@ -49,7 +46,11 @@ function Message({ message, isOwn, onImageClick, onDelete }) {
           }`}
         >
         {!isOwn && message.sender?.name && (
-          <div className="text-[10px] sm:text-xs font-bold text-blue-600 dark:text-blue-400 mb-0.5 sm:mb-1 flex items-center gap-1">
+          <div 
+            className="text-[10px] sm:text-xs font-bold text-blue-600 dark:text-blue-400 mb-0.5 sm:mb-1 flex items-center gap-1 cursor-pointer hover:underline"
+            onClick={() => onUserClick && onUserClick(message.sender)}
+            title="Click to view profile"
+          >
             <span className="text-xs">👤</span>
             {message.sender.name}
           </div>

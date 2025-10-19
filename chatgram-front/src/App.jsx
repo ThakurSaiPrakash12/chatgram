@@ -10,7 +10,15 @@ import { API_BASE_URL } from "./config/api";
 
 function App() {
   const [chats, setChats] = useState([]);
-  const [currentChat, setCurrentChat] = useState(null);
+  const [currentChat, setCurrentChat] = useState(() => {
+    try {
+      const savedChat = localStorage.getItem("chatgramCurrentChat");
+      return savedChat ? JSON.parse(savedChat) : null;
+    } catch (error) {
+      console.error('Error parsing current chat:', error);
+      return null;
+    }
+  });
   const [user, setUser] = useState(() => {
     try {
       const userData = localStorage.getItem("chatgramUser");
@@ -20,6 +28,15 @@ function App() {
       return null;
     }
   });
+
+  // Save current chat to localStorage whenever it changes
+  useEffect(() => {
+    if (currentChat) {
+      localStorage.setItem("chatgramCurrentChat", JSON.stringify(currentChat));
+    } else {
+      localStorage.removeItem("chatgramCurrentChat");
+    }
+  }, [currentChat]);
 
   useEffect(() => {
     let mounted = true;

@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 import InputBox from "./Inputbox";
 import Message from "./Message";
 import GroupInfo from "./GroupInfo";
+import UserProfileModal from "./UserProfileModal";
 import { getUserAvatar, getGroupAvatar } from "../utils/avatarHelper";
 import { useTheme } from "../context/ThemeContext";
 import { API_BASE_URL, SOCKET_URL } from "../config/api";
@@ -15,6 +16,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
   const [messages, setMessages] = useState([]);
   const [typingUser, setTypingUser] = useState("");
   const [showGroupInfo, setShowGroupInfo] = useState(false);
+  const [viewingUserProfile, setViewingUserProfile] = useState(null);
   const messagesEndRef = useRef(null);
 
   const currentUserId = user?.user?._id;
@@ -243,6 +245,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
               message={msg} 
               isOwn={senderId === currentUserId}
               onDelete={handleDeleteMessage}
+              onUserClick={setViewingUserProfile}
             />
           );
         })}
@@ -272,6 +275,14 @@ function ChatBox({ chat, user, setCurrentChat }) {
             setCurrentChat(updatedChat);
             setShowGroupInfo(false);
           }}
+        />
+      )}
+
+      {/* User Profile Modal */}
+      {viewingUserProfile && (
+        <UserProfileModal
+          user={viewingUserProfile}
+          onClose={() => setViewingUserProfile(null)}
         />
       )}
     </div>
