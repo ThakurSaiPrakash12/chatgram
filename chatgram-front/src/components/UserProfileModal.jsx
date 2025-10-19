@@ -6,6 +6,10 @@ import { useState } from "react";
 function UserProfileModal({ user, onClose, onSendMessage }) {
   const { isDarkMode } = useTheme();
   const [loading, setLoading] = useState(false);
+  
+  // Get current logged-in user
+  const currentUser = JSON.parse(localStorage.getItem("chatgramUser"));
+  const isOwnProfile = currentUser?.user?._id === user?._id;
 
   if (!user) return null;
 
@@ -77,14 +81,19 @@ function UserProfileModal({ user, onClose, onSendMessage }) {
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{user?.email}</p>
               <div className="inline-flex items-center gap-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-3 py-1 rounded-full text-xs font-medium"><span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Active now</div>
             </div>
-            <button 
-              onClick={handleSendMessage}
-              disabled={loading}
-              className={`w-full mb-6 group bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-            >
-              <span className="text-xl group-hover:scale-110 transition-transform">{loading ? '⏳' : '💬'}</span>
-              <span>{loading ? 'Opening...' : 'Send Message'}</span>
-            </button>
+            
+            {/* Only show Send Message button if not viewing own profile */}
+            {!isOwnProfile && (
+              <button 
+                onClick={handleSendMessage}
+                disabled={loading}
+                className={`w-full mb-6 group bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              >
+                <span className="text-xl group-hover:scale-110 transition-transform">{loading ? '⏳' : '💬'}</span>
+                <span>{loading ? 'Opening...' : 'Send Message'}</span>
+              </button>
+            )}
+            
             <div className="w-full bg-white dark:bg-gray-800 p-5 rounded-2xl border-2 border-indigo-200 dark:border-gray-600">
               <div className="flex items-center gap-2 mb-3"><span className="text-xl"></span><h3 className="text-base font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">About</h3></div>
               <p className="text-sm text-gray-800 dark:text-gray-100 leading-relaxed italic font-medium">"{user?.about || "Hey there! I am using ChatGram "}"</p>
