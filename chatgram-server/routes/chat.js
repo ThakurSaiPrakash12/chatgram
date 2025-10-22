@@ -252,4 +252,45 @@ router.put("/group/leave", async (req, res) => {
   }
 });
 
+// Delete chat (for one-on-one chats only - removes from user's chat list)
+router.delete("/:chatId", async (req, res) => {
+  const { chatId } = req.params;
+  const currentUserId = getUserIdFromToken(req);
+
+  if (!currentUserId) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+
+  try {
+    const chat = await Chat.findById(chatId);
+    
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
+
+    // Check if user is part of this chat
+    if (!chat.users.some(user => user.toString() === currentUserId)) {
+      return res.status(403).json({ message: "Not authorized to delete this chat" });
+    }
+
+    // For one-on-one chats, delete the entire chat
+    if (!chat.isGroupChat) {
+      await Chat.findByIdAndDelete(chatId);
+      res.json({ message: "Chat deleted successfully" });
+    } else {
+      // For group chats, just remove the user from the group
+      const updated = await Chat.findByIdAndUpdate(
+        chatId,
+        { $pull: { users: currentUserId } },
+        { new: true }
+      )
+        .populate("users", "-password");
+
+      res.json({ message: "Left group successfully", chat: updated });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 export default router;

@@ -203,8 +203,14 @@ function ChatBox({ chat, user, setCurrentChat }) {
           src={chatImage}
           alt={chatName}
           className="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover border-2 md:border-3 border-white dark:border-gray-800 shadow-xl cursor-pointer hover:scale-110 transition-transform"
-          onClick={() => setViewingImage({ url: chatImage, name: chatName })}
-          title="Click to view profile picture"
+          onClick={() => {
+            if (chat.isGroupChat) {
+              setShowGroupInfo(true);
+            } else if (chatPartner) {
+              setViewingUserProfile(chatPartner);
+            }
+          }}
+          title={chat.isGroupChat ? "Click to view group info" : "Click to view profile"}
         />
         <div className="flex-1 min-w-0">
           <h2 className="font-bold text-white text-base md:text-xl truncate">{chatName}</h2>

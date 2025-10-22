@@ -175,4 +175,54 @@ router.post("/update-profile", async (req, res) => {
   }
 });
 
+// Delete user account
+router.delete("/delete-account", async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    const { password } = req.body;
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Verify password before deleting
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Password is incorrect" });
+    }
+
+    // Delete user from all chats
+    const Chat = (await import("../models/chat.js")).default;
+    await Chat.updateMany(
+      { users: decoded.id },
+      { $pull: { users: decoded.id } }
+    );
+
+    // Delete chats where user was the only member (one-on-one chats)
+    await Chat.deleteMany({
+      isGroupChat: false,
+      users: { $size: 0 }
+    });
+
+    // Delete all messages from this user
+    const Message = (await import("../models/message.js")).default;
+    await Message.deleteMany({ sender: decoded.id });
+
+    // Finally, delete the user
+    await User.findByIdAndDelete(decoded.id);
+
+    res.json({ message: "Account deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Account deletion failed", error: err.message });
+  }
+});
+
 export default router;
