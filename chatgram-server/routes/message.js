@@ -7,9 +7,16 @@ const router = express.Router();
 // Get messages for a chat
 router.get("/:chatId", async (req, res) => {
   try {
+    const limit = parseInt(req.query.limit) || 100;
+    const skip = parseInt(req.query.skip) || 0;
+    
     const messages = await Message.find({ chatId: req.params.chatId })
-      .populate("sender", "-password")
-      .sort({ createdAt: 1 });
+      .populate("sender", "name email profilePic")
+      .select("sender content messageType imageUrl createdAt")
+      .sort({ createdAt: 1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
     res.json(messages);
   } catch (err) {
     console.error("Error fetching messages:", err);

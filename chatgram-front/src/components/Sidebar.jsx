@@ -7,7 +7,7 @@ import { useTheme } from "../context/ThemeContext";
 import { API_BASE_URL, SOCKET_URL } from "../config/api";
 import UserProfileModal from "./UserProfileModal";
 
-function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
+function Sidebar({ chats, setCurrentChat, user, refreshChats, loading: chatsLoading }) {
   const navigate = useNavigate();
   const { isDarkMode, toggleTheme } = useTheme();
   const socketRef = useRef(null);
@@ -377,6 +377,12 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
       <div className="mb-3 md:mb-4 flex items-center gap-2">
         <h3 className="text-xs md:text-sm font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider">Messages</h3>
         <span className="bg-blue-500 dark:bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-semibold">{chats?.length || 0}</span>
+        {chatsLoading && (
+          <div className="ml-2 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+            <div className="animate-spin">⌛</div>
+            <span>Loading...</span>
+          </div>
+        )}
       </div>
 
       {/* New Chat Modal */}
@@ -605,7 +611,19 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
       )}
 
       <ul className="flex-1 overflow-y-auto space-y-2">
-        {chats?.map((chat) => {
+        {chatsLoading && chats.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+            <div className="text-4xl animate-spin mb-3">⌛</div>
+            <p className="text-sm">Loading your chats...</p>
+          </div>
+        ) : chats.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+            <div className="text-4xl mb-3">💬</div>
+            <p className="text-sm">No chats yet</p>
+            <p className="text-xs mt-1">Start a new chat to begin messaging</p>
+          </div>
+        ) : (
+          chats?.map((chat) => {
           // Get the chat partner for one-on-one chats
           const chatPartner = chat?.isGroupChat 
             ? null 
@@ -718,7 +736,8 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats }) {
               </div>
             </li>
           );
-        })}
+        })
+        )}
       </ul>
 
       {/* User Profile Modal */}

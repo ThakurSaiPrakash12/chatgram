@@ -9,7 +9,17 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { API_BASE_URL } from "./config/api";
 
 function App() {
-  const [chats, setChats] = useState([]);
+  const [chats, setChats] = useState(() => {
+    // Try to load cached chats from localStorage
+    try {
+      const cachedChats = localStorage.getItem("chatgramChatsCache");
+      return cachedChats ? JSON.parse(cachedChats) : [];
+    } catch (error) {
+      console.error('Error parsing cached chats:', error);
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(false);
   const [currentChat, setCurrentChat] = useState(() => {
     try {
       const savedChat = localStorage.getItem("chatgramCurrentChat");
@@ -46,6 +56,7 @@ function App() {
       try {
         if (!user?.user?._id) return;
         
+        setLoading(true);
         const res = await fetch(`${API_BASE_URL}/api/chats/${user.user._id}`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
@@ -59,12 +70,19 @@ function App() {
         if (!res.ok) {
           const errorText = await res.text();
           console.error('Failed to fetch chats:', errorText);
+          setLoading(false);
           return;
         }
 
         const data = await res.json();
         if (mounted) {
           setChats(data);
+          // Cache chats in localStorage for faster initial load
+          try {
+            localStorage.setItem("chatgramChatsCache", JSON.stringify(data));
+          } catch (e) {
+            console.error('Error caching chats:', e);
+          }
         }
       } catch (error) {
         if (error.name === 'AbortError') {
@@ -72,6 +90,10 @@ function App() {
           return;
         }
         console.error('Error fetching chats:', error);
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
@@ -101,6 +123,12 @@ function App() {
 
       const data = await res.json();
       setChats(data);
+      // Update cache
+      try {
+        localStorage.setItem("chatgramChatsCache", JSON.stringify(data));
+      } catch (e) {
+        console.error('Error caching chats:', e);
+      }
     } catch (error) {
       console.error('Error fetching chats:', error);
     }
@@ -143,6 +171,7 @@ function App() {
                     chats={chats} 
                     setCurrentChat={setCurrentChat}
                     refreshChats={refreshChats}
+                    loading={loading}
                   />
                 </div>
                 

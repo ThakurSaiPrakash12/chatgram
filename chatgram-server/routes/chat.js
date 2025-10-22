@@ -22,7 +22,12 @@ const getUserIdFromToken = (req) => {
 // Get all chats for a user
 router.get("/:userId", async (req, res) => {
   try {
-    const chats = await Chat.find({ users: req.params.userId }).populate("users", "-password");
+    const chats = await Chat.find({ users: req.params.userId })
+      .populate("users", "name email profilePic")
+      .select("chatName isGroupChat users groupImage updatedAt")
+      .sort({ updatedAt: -1 })
+      .lean()
+      .limit(100);
     res.json(chats);
   } catch (err) {
     res.status(500).json({ message: err.message });
