@@ -7,11 +7,9 @@ import { useTheme } from "../context/ThemeContext";
 import { API_BASE_URL, SOCKET_URL } from "../config/api";
 import UserProfileModal from "./UserProfileModal";
 
-function Sidebar({ chats, setCurrentChat, user, refreshChats, loading: chatsLoading }) {
+function Sidebar({ chats, setCurrentChat, user, refreshChats, loading: chatsLoading, socket, onlineUsers }) {
   const navigate = useNavigate();
   const { isDarkMode, toggleTheme } = useTheme();
-  const socketRef = useRef(null);
-  const [onlineUsers, setOnlineUsers] = useState({});
   const [showNewChat, setShowNewChat] = useState(false);
   const [showNewGroup, setShowNewGroup] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,33 +28,10 @@ function Sidebar({ chats, setCurrentChat, user, refreshChats, loading: chatsLoad
   const userData = JSON.parse(localStorage.getItem("chatgramUser"));
   const currentUserId = userData?.user?._id;
 
+  // Diagnostic logging of onlineUsers state (Timing check)
   useEffect(() => {
-    if (!currentUserId) return;
-
-    // Initialize socket connection
-    socketRef.current = io(SOCKET_URL, {
-      reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5
-    });
-
-    // Connect user
-    socketRef.current.emit("user_connected", currentUserId);
-
-    // Handle online users updates
-    socketRef.current.on("update_users", (users) => {
-      setOnlineUsers(users || {});
-    });
-
-    // Cleanup function
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.off("update_users");
-        socketRef.current.disconnect();
-      }
-    };
-  }, [currentUserId]);
+    console.log(`👤 [Sidebar.jsx] Logged-in User: ${currentUserId}, Socket ID: ${socket?.id || "None"}, onlineUsers:`, onlineUsers);
+  }, [onlineUsers, socket, currentUserId]);
 
   const searchUsers = async (query) => {
     if (!query.trim()) {

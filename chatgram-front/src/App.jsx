@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { io } from "socket.io-client";
 import Sidebar from "./components/Sidebar";
 import ChatBox from "./components/Chatbox";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import { ThemeProvider } from "./context/ThemeContext";
-import { API_BASE_URL } from "./config/api";
+import { API_BASE_URL, SOCKET_URL } from "./config/api";
 
 function App() {
   const [chats, setChats] = useState(() => {
@@ -38,6 +39,72 @@ function App() {
       return null;
     }
   });
+  
+  // Single centralized Socket.IO instance and presence state (Phase 7, 8, & 9 timing fix)
+  const [socket, setSocket] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState({});
+
+  // Sync Socket.IO connection state with user authentication token
+  useEffect(() => {
+    if (!user?.token) {
+      if (socket) {
+        socket.disconnect();
+        setSocket(null);
+      }
+      setOnlineUsers({});
+      return;
+    }
+
+    console.log(`🔌 [App.jsx] Initializing Socket.IO for user ${user?.user?._id || "unknown"}`);
+
+    // Create the Socket.IO client with autoConnect: false to prevent background connection before listeners attach
+    const newSocket = io(SOCKET_URL, {
+      auth: {
+        token: user.token
+      },
+      autoConnect: false,
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionAttempts: 5
+    });
+
+    // Register presence listener BEFORE calling connect
+    const handleUpdateUsers = (usersList) => {
+      console.log(`🔌 [App.jsx] received presence payload for user ${user?.user?._id}:`, usersList);
+      const usersObj = {};
+      if (Array.isArray(usersList)) {
+        usersList.forEach(id => {
+          usersObj[id] = true;
+        });
+      }
+      console.log(`🔌 [App.jsx] Updating onlineUsers React state:`, usersObj);
+      setOnlineUsers(usersObj);
+    };
+
+    newSocket.on("update_users", handleUpdateUsers);
+
+    newSocket.on("connect", () => {
+      console.log(`🔌 [App.jsx] Socket connected. Socket ID: ${newSocket.id}`);
+    });
+
+    newSocket.on("connect_error", (error) => {
+      console.error("🔌 [App.jsx] Socket connection error:", error);
+    });
+
+    newSocket.on("disconnect", (reason) => {
+      console.log(`🔌 [App.jsx] Socket disconnected due to: ${reason}`);
+    });
+
+    // Now call connect after all key event handlers are bound
+    newSocket.connect();
+    setSocket(newSocket);
+
+    return () => {
+      console.log("🔌 [App.jsx] Cleaning up socket connection and listeners");
+      newSocket.off("update_users", handleUpdateUsers);
+      newSocket.disconnect();
+    };
+  }, [user]);
 
   // Save current chat to localStorage whenever it changes
   useEffect(() => {
@@ -54,10 +121,11 @@ function App() {
 
     const fetchChats = async () => {
       try {
-        if (!user?.user?._id) return;
+        if (!user?.token) return;
         
         setLoading(true);
-        const res = await fetch(`${API_BASE_URL}/api/chats/${user.user._id}`, {
+        // GET /api/chats derives user identity directly from JWT (Phase 3)
+        const res = await fetch(`${API_BASE_URL}/api/chats`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
             'Accept': 'application/json'
@@ -107,9 +175,10 @@ function App() {
 
   const refreshChats = async () => {
     try {
-      if (!user?.user?._id) return;
+      if (!user?.token) return;
       
-      const res = await fetch(`${API_BASE_URL}/api/chats/${user.user._id}`, {
+      // GET /api/chats derives user identity directly from JWT (Phase 3)
+      const res = await fetch(`${API_BASE_URL}/api/chats`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
           'Accept': 'application/json'
@@ -172,6 +241,8 @@ function App() {
                     setCurrentChat={setCurrentChat}
                     refreshChats={refreshChats}
                     loading={loading}
+                    socket={socket}
+                    onlineUsers={onlineUsers}
                   />
                 </div>
                 
@@ -182,6 +253,7 @@ function App() {
                       chat={currentChat}
                       user={user}
                       setCurrentChat={setCurrentChat}
+                      socket={socket}
                     />
                   ) : (
                     <div className="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-500 p-4 text-center">

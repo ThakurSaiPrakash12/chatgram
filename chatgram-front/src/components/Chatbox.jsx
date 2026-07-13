@@ -1,17 +1,14 @@
 // src/components/ChatBox.jsx
 import { useEffect, useState, useRef } from "react";
-import { io } from "socket.io-client";
 import InputBox from "./Inputbox";
 import Message from "./Message";
 import GroupInfo from "./GroupInfo";
 import UserProfileModal from "./UserProfileModal";
 import { getUserAvatar, getGroupAvatar } from "../utils/avatarHelper";
 import { useTheme } from "../context/ThemeContext";
-import { API_BASE_URL, SOCKET_URL } from "../config/api";
+import { API_BASE_URL } from "../config/api";
 
-const socket = io(SOCKET_URL);
-
-function ChatBox({ chat, user, setCurrentChat }) {
+function ChatBox({ chat, user, setCurrentChat, socket }) {
   const { isDarkMode } = useTheme();
   const [messages, setMessages] = useState([]);
   const [typingUser, setTypingUser] = useState("");
@@ -44,40 +41,45 @@ function ChatBox({ chat, user, setCurrentChat }) {
   }, [messages]);
 
   useEffect(() => {
-    if (!chat) return;
+    if (!chat || !socket) return;
 
     socket.emit("join_chat", chat._id);
     fetchMessages();
 
-    socket.on("receive_message", (data) => {
+    const handleReceiveMessage = (data) => {
       if (data.chatId === chat._id) {
         setMessages((prev) => [...prev, data]);
       }
-    });
+    };
 
-    socket.on("typing", ({ userName, chatId }) => {
+    const handleTyping = ({ userName, chatId }) => {
       if (chatId === chat._id && userName !== currentUserName) {
         setTypingUser(userName);
       }
-    });
+    };
 
-    socket.on("stop_typing", ({ chatId }) => {
+    const handleStopTyping = ({ chatId }) => {
       if (chatId === chat._id) setTypingUser("");
-    });
+    };
 
-    socket.on("message_deleted", ({ messageId, chatId }) => {
+    const handleMessageDeleted = ({ messageId, chatId }) => {
       if (chatId === chat._id) {
         setMessages(prevMessages => prevMessages.filter(msg => msg._id !== messageId));
       }
-    });
+    };
+
+    socket.on("receive_message", handleReceiveMessage);
+    socket.on("typing", handleTyping);
+    socket.on("stop_typing", handleStopTyping);
+    socket.on("message_deleted", handleMessageDeleted);
 
     return () => {
-      socket.off("receive_message");
-      socket.off("typing");
-      socket.off("stop_typing");
-      socket.off("message_deleted");
+      socket.off("receive_message", handleReceiveMessage);
+      socket.off("typing", handleTyping);
+      socket.off("stop_typing", handleStopTyping);
+      socket.off("message_deleted", handleMessageDeleted);
     };
-  }, [chat, currentUserName]);
+  }, [chat, socket, currentUserName]);
 
   const fetchMessages = async () => {
     try {
@@ -93,7 +95,9 @@ function ChatBox({ chat, user, setCurrentChat }) {
       }
       
       const data = await res.json();
-      setMessages(data || []);
+      // Handle either direct array or pagination object structure `{ messages, nextCursor, hasMore }`
+      const messagesList = Array.isArray(data) ? data : (data.messages || []);
+      setMessages(messagesList);
     } catch (err) {
       console.error("Failed to fetch messages:", err);
       setMessages([]);
@@ -105,7 +109,7 @@ function ChatBox({ chat, user, setCurrentChat }) {
       const payload = {
         chatId: chat._id,
         content: messageData.content,
-        sender: currentUserId,
+        // sender is strictly derived from JWT on server (Phase 3 & 5)
         messageType: messageData.messageType || "text",
       };
 
@@ -134,7 +138,9 @@ function ChatBox({ chat, user, setCurrentChat }) {
       const data = await res.json();
       console.log('Message sent:', data);
       
-      socket.emit("send_message", { ...data, chatId: chat._id });
+      if (socket) {
+        socket.emit("send_message", { ...data, chatId: chat._id });
+      }
       setMessages((prev) => [...prev, data]);
     } catch (err) {
       console.error("Failed to send message:", err);
@@ -148,8 +154,8 @@ function ChatBox({ chat, user, setCurrentChat }) {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${user.token}`
-        },
-        body: JSON.stringify({ userId: currentUserId })
+        }
+        // Removed body: JSON.stringify({ userId: currentUserId }) to not trust client payload (Phase 3 & 5)
       });
 
       if (!res.ok) {
@@ -165,7 +171,9 @@ function ChatBox({ chat, user, setCurrentChat }) {
       setMessages(prevMessages => prevMessages.filter(msg => msg._id !== messageId));
 
       // Emit socket event to notify others
-      socket.emit("delete_message", { messageId, chatId: chat._id });
+      if (socket) {
+        socket.emit("delete_message", { messageId, chatId: chat._id });
+      }
     } catch (err) {
       console.error("Failed to delete message:", err);
       alert("Failed to delete message");

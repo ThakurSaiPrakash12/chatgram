@@ -1,11 +1,6 @@
 # Node.js dependencies
 node_modules/
 
-# Production build outputs
-dist/
-dist-ssr/
-build/
-
 # Local environment variables and secrets
 .env
 .env.local
@@ -21,12 +16,16 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Process managers
+pids
+*.pid
+*.seed
+*.pid.lock
+
 # IDE settings
 .vscode/
 .idea/
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?

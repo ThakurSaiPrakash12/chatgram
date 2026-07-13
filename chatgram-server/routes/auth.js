@@ -2,124 +2,158 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../models/user.js";
-import dotenv from "dotenv";
+import { protect } from "../middleware/authMiddleware.js";
+import { validateBase64Image } from "../utils/validation.js";
 
-dotenv.config();
 const router = express.Router();
 
-// Signup
-router.post("/signup", async (req, res) => {
+// ---------------------------------------------------------------------------
+// POST /api/auth/signup
+// Public — no token required
+// ---------------------------------------------------------------------------
+router.post("/signup", async (req, res, next) => {
   try {
     const { name, email, password, profilePic } = req.body;
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "User already exists" });
+    if (!name || !name.trim()) {
+      return res.status(400).json({ message: "Name is required" });
+    }
+    if (!email || !email.trim()) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
 
-    const userData = { name, email, password };
+    // Validate profile picture if provided
+    if (profilePic) {
+      const imgCheck = validateBase64Image(profilePic);
+      if (!imgCheck.valid) {
+        return res.status(400).json({ message: imgCheck.message });
+      }
+    }
+
+    const existingUser = await User.findOne({ email: email.trim().toLowerCase() });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const userData = { name: name.trim(), email: email.trim().toLowerCase(), password };
     if (profilePic) userData.profilePic = profilePic;
 
     const user = await User.create(userData);
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-    const responseUser = {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      profilePic: user.profilePic,
-      about: user.about
-    };
-
-    res.status(201).json({ user: responseUser, token });
+    res.status(201).json({
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePic: user.profilePic,
+        about: user.about,
+      },
+      token,
+    });
   } catch (err) {
-    res.status(500).json({ message: "Signup failed", error: err.message });
+    next(err);
   }
 });
 
-// Login
-router.post("/login", async (req, res) => {
+// ---------------------------------------------------------------------------
+// POST /api/auth/login
+// Public — no token required
+// ---------------------------------------------------------------------------
+router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    
+
     if (!email || !password) {
-      return res.status(400).json({ 
-        message: "Missing required fields", 
-        details: { email: !email, password: !password } 
-      });
+      return res.status(400).json({ message: "Email and password are required" });
     }
 
-    console.log('Login attempt for email:', email);
-    
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
     if (!user) {
-      console.log('User not found:', email);
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const isMatch = await user.matchPassword(password);
-    console.log('Password match result:', isMatch);
-    
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid password" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-    // Send user data without sensitive information
-    const userData = {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      profilePic: user.profilePic,
-      about: user.about
-    };
-
-    res.status(200).json({ user: userData, token });
-  } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ 
-      message: "Login failed", 
-      error: err.message,
-      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    res.status(200).json({
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePic: user.profilePic,
+        about: user.about,
+      },
+      token,
     });
+  } catch (err) {
+    next(err);
   }
 });
 
-// Search users (for finding people to chat with)
-router.get("/search", async (req, res) => {
+// ---------------------------------------------------------------------------
+// GET /api/auth/search?q=<keyword>
+// Protected — requires valid JWT
+// Returns users matching the keyword (excluding self)
+// ---------------------------------------------------------------------------
+router.get("/search", protect, async (req, res, next) => {
   try {
     const keyword = req.query.q;
-    if (!keyword) {
+
+    if (!keyword || !keyword.trim()) {
       return res.json([]);
     }
 
+    // Limit length to prevent ReDoS via catastrophic regex backtracking
+    const safeKeyword = keyword.trim().slice(0, 50);
+
+    // Escape special regex characters from user input
+    const escaped = safeKeyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
     const users = await User.find({
+      _id: { $ne: req.user.id }, // Exclude the searching user
       $or: [
-        { name: { $regex: keyword, $options: "i" } },
-        { email: { $regex: keyword, $options: "i" } },
+        { name: { $regex: escaped, $options: "i" } },
+        { email: { $regex: escaped, $options: "i" } },
       ],
-    }).select("-password").limit(10);
-    
+    })
+      .select("-password")
+      .limit(10);
+
     res.json(users);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 });
 
-// Change password
-router.post("/change-password", async (req, res) => {
+// ---------------------------------------------------------------------------
+// POST /api/auth/change-password
+// Protected
+// ---------------------------------------------------------------------------
+router.post("/change-password", protect, async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ message: "No token provided" });
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Current and new passwords are required" });
+    }
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "New password must be at least 6 characters" });
     }
 
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    const { currentPassword, newPassword } = req.body;
-    const user = await User.findById(decoded.id);
-
+    // req.user.id comes from the verified JWT — not from the client
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -134,94 +168,105 @@ router.post("/change-password", async (req, res) => {
 
     res.json({ message: "Password updated successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Password change failed", error: err.message });
+    next(err);
   }
 });
 
-// Update profile
-router.post("/update-profile", async (req, res) => {
+// ---------------------------------------------------------------------------
+// POST /api/auth/update-profile
+// Protected
+// ---------------------------------------------------------------------------
+router.post("/update-profile", protect, async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ message: "No token provided" });
+    const { profilePic, about } = req.body;
+
+    // Validate profile picture if a new one is provided
+    if (profilePic) {
+      const imgCheck = validateBase64Image(profilePic);
+      if (!imgCheck.valid) {
+        return res.status(400).json({ message: imgCheck.message });
+      }
     }
 
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    const { profilePic, about } = req.body;
-    const user = await User.findById(decoded.id);
-
+    // Identity is from the verified JWT — never from req.body
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     if (profilePic !== undefined) user.profilePic = profilePic;
-    if (about !== undefined) user.about = about;
-    
+    if (about !== undefined) user.about = about.trim ? about.trim() : about;
+
     await user.save();
 
-    const userData = {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      profilePic: user.profilePic,
-      about: user.about
-    };
-
-    res.json({ message: "Profile updated successfully", user: userData });
+    res.json({
+      message: "Profile updated successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePic: user.profilePic,
+        about: user.about,
+      },
+    });
   } catch (err) {
-    res.status(500).json({ message: "Profile update failed", error: err.message });
+    next(err);
   }
 });
 
-// Delete user account
-router.delete("/delete-account", async (req, res) => {
+// ---------------------------------------------------------------------------
+// DELETE /api/auth/delete-account
+// Protected — requires password confirmation
+// ---------------------------------------------------------------------------
+router.delete("/delete-account", protect, async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ message: "No token provided" });
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({ message: "Password is required to delete account" });
     }
 
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    const { password } = req.body;
-    const user = await User.findById(decoded.id);
-
+    // Identity from JWT — client cannot supply a different userId
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Verify password before deleting
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: "Password is incorrect" });
     }
 
-    // Delete user from all chats
     const Chat = (await import("../models/chat.js")).default;
+    const Message = (await import("../models/message.js")).default;
+
+    // Remove user from all group chats they belong to
     await Chat.updateMany(
-      { users: decoded.id },
-      { $pull: { users: decoded.id } }
+      { users: req.user.id, isGroupChat: true },
+      { $pull: { users: req.user.id } }
     );
 
-    // Delete chats where user was the only member (one-on-one chats)
-    await Chat.deleteMany({
+    // Delete all one-on-one chats they were part of, along with their messages
+    const oneOnOneChats = await Chat.find({
       isGroupChat: false,
-      users: { $size: 0 }
+      users: req.user.id,
     });
+    const oneOnOneChatIds = oneOnOneChats.map((c) => c._id);
 
-    // Delete all messages from this user
-    const Message = (await import("../models/message.js")).default;
-    await Message.deleteMany({ sender: decoded.id });
+    if (oneOnOneChatIds.length > 0) {
+      await Message.deleteMany({ chatId: { $in: oneOnOneChatIds } });
+      await Chat.deleteMany({ _id: { $in: oneOnOneChatIds } });
+    }
 
-    // Finally, delete the user
-    await User.findByIdAndDelete(decoded.id);
+    // Delete all messages sent by this user in remaining chats
+    await Message.deleteMany({ sender: req.user.id });
+
+    // Finally delete the user document
+    await User.findByIdAndDelete(req.user.id);
 
     res.json({ message: "Account deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Account deletion failed", error: err.message });
+    next(err);
   }
 });
 

@@ -13,7 +13,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
-        sync: false # Set this manually in Render dashboard
+        sync: false # Set this manually in Render dashboard (e.g., mongodb+srv://user:password@cluster.mongodb.net/chatgram)
       - key: JWT_SECRET
         generateValue: true # Render will auto-generate
     healthCheckPath: /

@@ -11,8 +11,12 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
 
   const userData = JSON.parse(localStorage.getItem("chatgramUser"));
   const currentUserId = userData?.user?._id;
-  // Any member can add/remove others
+  
+  // Membership check
   const isMember = chat?.users?.some(u => u._id === currentUserId);
+  
+  // Group Admin check (Phase 6)
+  const isAdmin = chat?.groupAdmin === currentUserId || chat?.groupAdmin?._id === currentUserId;
 
   const searchUsers = async (query) => {
     if (!query.trim()) {
@@ -107,16 +111,15 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
 
     try {
       setLoading(true);
-      // Use the remove route to remove yourself
-      const res = await fetch(`${API_BASE_URL}/api/chats/group/remove`, {
+      // PUT /api/chats/group/leave is the correct endpoint (Phase 6)
+      const res = await fetch(`${API_BASE_URL}/api/chats/group/leave`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${userData.token}`,
         },
         body: JSON.stringify({
-          chatId: chat._id,
-          userId: currentUserId, // Remove yourself
+          chatId: chat._id
         }),
       });
 
@@ -128,7 +131,6 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
       }
 
       onClose();
-      // Optionally redirect to chat list
     } catch (error) {
       console.error('Error leaving group:', error);
       alert('Failed to leave group');
@@ -216,7 +218,7 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
                 alt={chat?.chatName}
                 className="w-20 h-20 rounded-full border-4 border-white shadow-lg object-cover"
               />
-              {isMember && (
+              {isMember && isAdmin && (
                 <label 
                   htmlFor="group-image-upload" 
                   className="absolute bottom-0 right-0 bg-blue-500 text-white w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-all shadow-md"
@@ -231,23 +233,23 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
                 accept="image/*"
                 onChange={handleImageUpload}
                 className="hidden"
-                disabled={!isMember || uploadingImage}
+                disabled={!isMember || !isAdmin || uploadingImage}
               />
             </div>
             <div>
               <h4 className="text-xl font-bold text-gray-800">{chat?.chatName}</h4>
               <p className="text-sm text-gray-600">{chat?.users?.length} members</p>
-              {isMember && (
+              {isMember && isAdmin && (
                 <p className="text-xs text-gray-500 mt-1">Click camera icon to change image</p>
               )}
             </div>
           </div>
         </div>
 
-        {/* Add Members (Any Member Can Add) */}
-        {isMember && (
+        {/* Add Members (Group Admin Only) */}
+        {isMember && isAdmin && (
           <div className="mb-6">
-            <label className="block text-sm font-bold text-gray-700 mb-2">Add Members</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Add Members (Admin Only)</label>
             <div className="relative">
               <input
                 type="text"
@@ -293,6 +295,7 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
           <ul className="max-h-64 overflow-y-auto space-y-2">
             {chat?.users?.map((member) => {
               const isCurrentUser = member._id === currentUserId;
+              const isMemberAdmin = chat?.groupAdmin === member._id || chat?.groupAdmin?._id === member._id;
               
               return (
                 <li
@@ -306,14 +309,15 @@ function GroupInfo({ chat, user, onClose, onUpdate }) {
                       className="w-12 h-12 rounded-full border-2 border-gray-200 object-cover"
                     />
                     <div>
-                      <p className="font-semibold text-gray-800">
+                      <p className="font-semibold text-gray-800 flex items-center gap-1.5">
                         {member.name}
-                        {isCurrentUser && <span className="text-xs text-blue-600 ml-2">(You)</span>}
+                        {isCurrentUser && <span className="text-xs text-blue-600 font-medium">(You)</span>}
+                        {isMemberAdmin && <span className="text-[10px] bg-amber-100 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Admin</span>}
                       </p>
                       <p className="text-xs text-gray-500">{member.email}</p>
                     </div>
                   </div>
-                  {isMember && !isCurrentUser && (
+                  {isMember && isAdmin && !isCurrentUser && (
                     <button
                       onClick={() => removeMember(member._id)}
                       disabled={loading}
