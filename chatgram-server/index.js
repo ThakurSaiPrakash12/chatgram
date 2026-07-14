@@ -137,12 +137,6 @@ io.on("connection", (socket) => {
 
   const presenceSnapshot = Array.from(onlineUsers.keys());
 
-  // Backend diagnostics (Timing & presence logs)
-  console.log(`🔌 [index.js] Authenticated User ID: ${userId}`);
-  console.log(`🔌 [index.js] Socket ID: ${socket.id}`);
-  console.log(`🔌 [index.js] Presence map user IDs after connection:`, presenceSnapshot);
-  console.log(`🔌 [index.js] Emitted presence snapshot:`, presenceSnapshot);
-
   // Send the complete current presence snapshot directly to the newly connected socket
   socket.emit("update_users", presenceSnapshot);
 
@@ -212,12 +206,6 @@ io.on("connection", (socket) => {
     }
 
     const presenceSnapshot = Array.from(onlineUsers.keys());
-
-    // Backend diagnostics (Disconnect logs)
-    console.log(`🔌 [index.js] Disconnect user ID: ${userId}`);
-    console.log(`🔌 [index.js] Disconnect socket ID: ${socket.id}`);
-    console.log(`🔌 [index.js] Presence map user IDs after disconnect:`, presenceSnapshot);
-    console.log(`🔌 [index.js] Emitting post-disconnect presence snapshot:`, presenceSnapshot);
 
     // Broadcast updated list of online user IDs to all remaining sockets
     socket.broadcast.emit("update_users", presenceSnapshot);

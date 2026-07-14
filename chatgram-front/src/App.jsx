@@ -70,14 +70,12 @@ function App() {
 
     // Register presence listener BEFORE calling connect
     const handleUpdateUsers = (usersList) => {
-      console.log(`🔌 [App.jsx] received presence payload for user ${user?.user?._id}:`, usersList);
       const usersObj = {};
       if (Array.isArray(usersList)) {
         usersList.forEach(id => {
           usersObj[id] = true;
         });
       }
-      console.log(`🔌 [App.jsx] Updating onlineUsers React state:`, usersObj);
       setOnlineUsers(usersObj);
     };
 
